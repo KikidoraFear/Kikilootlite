@@ -337,11 +337,11 @@ window.button_sr:SetScript("OnClick", function()
 end)
 window.import_sr:SetScript("OnTextChanged", function()
     ParseRaidres(this:GetText(), data_sr)
-    for item, _ in data_sr do
-        for _, player in ipairs(data_sr[item]) do
-            print(item..": "..player)
-        end
-    end
+    -- for item, _ in data_sr do
+    --     for _, player in ipairs(data_sr[item]) do
+    --         print(item..": "..player)
+    --     end
+    -- end
 end)
 
 window.button_ss:SetScript("OnClick", function()
@@ -355,9 +355,9 @@ window.button_ss:SetScript("OnClick", function()
 end)
 window.import_ss:SetScript("OnTextChanged", function()
     ParseLootSpreadsheet(this:GetText(), data_ss)
-    for item, info in data_ss do
-        print(item..": "..info)
-    end
+    -- for item, info in data_ss do
+    --     print(item..": "..info)
+    -- end
 end)
 
 window.button_if:SetScript("OnClick", function()
@@ -371,9 +371,9 @@ window.button_if:SetScript("OnClick", function()
 end)
 window.import_if:SetScript("OnTextChanged", function()
     ParseItemFilter(this:GetText(), data_if)
-    for item, info in pairs(data_if) do
-        print(item..": "..info.option.."_"..info.modifier)
-    end
+    -- for item, info in pairs(data_if) do
+    --     print(item..": "..info.option.."_"..info.modifier)
+    -- end
 end)
 window.import_if:SetText(config.text_if)
 ParseItemFilter(window.import_if:GetText(), data_if)
