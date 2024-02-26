@@ -1,0 +1,7 @@
+## Interface: 11200
+## Title: Kikilootlite1
+## Author: Kikidora
+## Notes: tool that helps distribute and roll off loot
+## Version: 1.0
+
+Kikilootlite.lua
