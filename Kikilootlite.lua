@@ -17,7 +17,7 @@
 local config = {
     min_rarity = 2, -- 0 grey, 1 white and quest items, 2 green, 3 blue, ...
     rarities = {"Grey", "White", "Green", "Blue", "Purple"},
-    text_if = "r#w#Recipe\nr#w#Pattern\nr#e#Onyxia Hide Backpack",
+    text_if = "r#w#Book:\nr#w#Recipe:\nr#w#Pattern:\nr#e#Onyxia Hide Backpack\nr#e#Tome of Tranquilizing Shot\nr#e#Fortitude of the Scourge\nr#e#Power of the Scourge\nr#e#Might of the Scourge\nr#e#Resilience of the Scourge",
     refresh_time = 5,
     channel = "RAID",
     window_height = 20,
@@ -31,52 +31,52 @@ local config = {
 }
 
 -- https://vanilla-wow-archive.fandom.com/wiki/Tier_1
-config.item_translate_table["T1 Head"] = {"Cenarion Helm", "Giantstalker's Helmet", "Arcanist Crown", "Lawbringer Helm", "Circlet of Prophecy", "Nightslayer Cover",
+config.item_translate_table["T1 Helm"] = {"Cenarion Helm", "Giantstalker's Helmet", "Arcanist Crown", "Lawbringer Helm", "Circlet of Prophecy", "Nightslayer Cover",
     "Earthfury Helmet", "Felheart Horns", "Helm of Might"}
-config.item_translate_table["T1 Legs"] = {"Cenarion Leggings", "Giantstalker's Leggings", "Arcanist Leggings", "Lawbringer Legplates", "Pants of Prophecy", "Nightslayer Pants",
+config.item_translate_table["T1 Leggings"] = {"Cenarion Leggings", "Giantstalker's Leggings", "Arcanist Leggings", "Lawbringer Legplates", "Pants of Prophecy", "Nightslayer Pants",
     "Earthfury Legguards", "Felheart Pants", "Legplates of Might"}
-config.item_translate_table["T1 Bracers"] = {"Cenarion Bracers", "Giantstalker's Bracers", "Arcanist Bindings", "Lawbringer Bracers", "Vambraces of Prophecy", "Nightslayer Bracelets",
+config.item_translate_table["T1 Wrist"] = {"Cenarion Bracers", "Giantstalker's Bracers", "Arcanist Bindings", "Lawbringer Bracers", "Vambraces of Prophecy", "Nightslayer Bracelets",
     "Earthfury Bracers", "Felheart Bracers", "Bracers of Might"}
 config.item_translate_table["T1 Belt"] = {"Cenarion Belt", "Giantstalker's Belt", "Arcanist Belt", "Lawbringer Belt", "Girdle of Prophecy", "Nightslayer Belt",
     "Earthfury Belt", "Felheart Belt", "Belt of Might"}
 config.item_translate_table["T1 Boots"] = {"Cenarion Boots", "Giantstalker's Boots", "Arcanist Boots", "Lawbringer Boots", "Boots of Prophecy", "Nightslayer Boots",
     "Earthfury Boots", "Felheart Slippers", "Sabatons of Might"}
-config.item_translate_table["T1 Hands"] = {"Cenarion Gloves", "Giantstalker's Gloves", "Arcanist Gloves", "Lawbringer Gauntlets", "Gloves of Prophecy", "Nightslayer Gloves",
+config.item_translate_table["T1 Gloves"] = {"Cenarion Gloves", "Giantstalker's Gloves", "Arcanist Gloves", "Lawbringer Gauntlets", "Gloves of Prophecy", "Nightslayer Gloves",
     "Earthfury Gauntlets", "Felheart Gloves", "Gauntlets of Might"}
-config.item_translate_table["T1 Shoulders"] = {"Cenarion Spaulders", "Giantstalker's Epaulets", "Arcanist Mantle", "Lawbringer Spaulders", "Mantle of Prophecy", "Nightslayer Shoulder Pads",
+config.item_translate_table["T1 Shoulder"] = {"Cenarion Spaulders", "Giantstalker's Epaulets", "Arcanist Mantle", "Lawbringer Spaulders", "Mantle of Prophecy", "Nightslayer Shoulder Pads",
     "Earthfury Epaulets", "Felheart Shoulder Pads", "Pauldrons of Might"}
 config.item_translate_table["T1 Chest"] = {"Cenarion Vestments", "Giantstalker's Breastplate", "Arcanist Robes", "Lawbringer Chestguard", "Robes of Prophecy", "Nightslayer Chestpiece",
     "Earthfury Vestments", "Felheart Robes", "Breastplate of Might"}
 
 -- https://vanilla-wow-archive.fandom.com/wiki/Tier_2
-config.item_translate_table["T2 Head"] = {"Stormrage Cover", "Dragonstalker's Helm", "Netherwind Crown", "Judgement Crown", "Halo of Transcendence", "Bloodfang Hood",
+config.item_translate_table["T2 Helm"] = {"Stormrage Cover", "Dragonstalker's Helm", "Netherwind Crown", "Judgement Crown", "Halo of Transcendence", "Bloodfang Hood",
     "Helmet of Ten Storms", "Nemesis Skullcap", "Helm of Wrath"}
-config.item_translate_table["T2 Legs"] = {"Stormrage Legguards", "Dragonstalker's Legguards", "Netherwind Pants", "Judgement Legplates", "Leggings of Transcendence", "Bloodfang Pants",
+config.item_translate_table["T2 Leggings"] = {"Stormrage Legguards", "Dragonstalker's Legguards", "Netherwind Pants", "Judgement Legplates", "Leggings of Transcendence", "Bloodfang Pants",
     "Legplates of Ten Storms", "Nemesis Leggings", "Legplates of Wrath"}
-config.item_translate_table["T2 Bracers"] = {"Stormrage Bracers", "Dragonstalker's Bracers", "Netherwind Bindings", "Judgement Bindings", "Bindings of Transcendence", "Bloodfang Bracers",
+config.item_translate_table["T2 Wrist"] = {"Stormrage Bracers", "Dragonstalker's Bracers", "Netherwind Bindings", "Judgement Bindings", "Bindings of Transcendence", "Bloodfang Bracers",
     "Bracers of Ten Storms", "Nemesis Bracers", "Bracelets of Wrath"}
 config.item_translate_table["T2 Belt"] = {"Stormrage Belt", "Dragonstalker's Belt", "Netherwind Belt", "Judgement Belt", "Belt of Transcendence", "Bloodfang Belt",
     "Belt of Ten Storms", "Nemesis Belt", "Waistband of Wrath"}
 config.item_translate_table["T2 Boots"] = {"Stormrage Boots", "Dragonstalker's Greaves", "Netherwind Boots", "Judgement Sabatons", "Boots of Transcendence", "Bloodfang Boots",
     "Greaves of Ten Storms", "Nemesis Boots", "Sabatons of Wrath"}
-config.item_translate_table["T2 Hands"] = {"Stormrage Handguards", "Dragonstalker's Gauntlets", "Netherwind Gloves", "Judgement Gauntlets", "Handguards of Transcendence", "Bloodfang Gloves",
+config.item_translate_table["T2 Gloves"] = {"Stormrage Handguards", "Dragonstalker's Gauntlets", "Netherwind Gloves", "Judgement Gauntlets", "Handguards of Transcendence", "Bloodfang Gloves",
     "Gauntlets of Ten Storms", "Nemesis Gloves", "Gauntlets of Wrath"}
-config.item_translate_table["T2 Shoulders"] = {"Stormrage Pauldrons", "Dragonstalker's Spaulders", "Netherwind Mantle", "Judgement Spaulders", "Pauldrons of Transcendence", "Bloodfang Spaulders",
+config.item_translate_table["T2 Shoulder"] = {"Stormrage Pauldrons", "Dragonstalker's Spaulders", "Netherwind Mantle", "Judgement Spaulders", "Pauldrons of Transcendence", "Bloodfang Spaulders",
     "Epaulets of Ten Storms", "Nemesis Spaulders", "Pauldrons of Wrath"}
 config.item_translate_table["T2 Chest"] = {"Stormrage Chestguard", "Dragonstalker's Breastplate", "Netherwind Robes", "Judgement Breastplate", "Robes of Transcendence", "Bloodfang Chestpiece",
     "Breastplate of Ten Storms", "Nemesis Robes", "Breastplate of Wrath"}
 
 -- https://vanilla-wow-archive.fandom.com/wiki/Tier_3
-config.item_translate_table["T3 Head"] = {"Desecrated Headpiece", "Desecrated Circlet", "Desecrated Helmet"}
-config.item_translate_table["T3 Legs"] = {"Desecrated Legguards", "Desecrated Leggings", "Desecrated Legplates"}
-config.item_translate_table["T3 Bracers"] = {"Desecrated Wristguards", "Desecrated Bindings", "Desecrated Bracers"}
-config.item_translate_table["T3 Belt"] = {"Desecrated Girdle", "Desecrated Belt", "Desecrated Waistguard"}
-config.item_translate_table["T3 Boots"] = {"Desecrated Boots", "Desecrated Sandals", "Desecrated Sabatons"}
-config.item_translate_table["T3 Hands"] = {"Desecrated Handguards", "Desecrated Gloves", "Desecrated Gauntlets"}
-config.item_translate_table["T3 Shoulders"] = {"Desecrated Spaulders", "Desecrated Shoulderpads", "Desecrated Pauldrons"}
-config.item_translate_table["T3 Chest"] = {"Desecrated Tunic", "Desecrated Robe", "Desecrated Breastplate"}
-config.item_translate_table["T3 Ring"] = {"Ring of the Dreamwalker", "Ring of the Cryptstalker", "Frostfire Ring", "Ring of Redemption", "Ring of Faith", "Bonescythe Ring", "Ring of the Earthshatterer",
-    "Plagueheart Ring", "Ring of the Dreadnaught"}
+-- config.item_translate_table["T3 Head"] = {"Desecrated Headpiece", "Desecrated Circlet", "Desecrated Helmet"}
+-- config.item_translate_table["T3 Legs"] = {"Desecrated Legguards", "Desecrated Leggings", "Desecrated Legplates"}
+-- config.item_translate_table["T3 Bracers"] = {"Desecrated Wristguards", "Desecrated Bindings", "Desecrated Bracers"}
+-- config.item_translate_table["T3 Belt"] = {"Desecrated Girdle", "Desecrated Belt", "Desecrated Waistguard"}
+-- config.item_translate_table["T3 Boots"] = {"Desecrated Boots", "Desecrated Sandals", "Desecrated Sabatons"}
+-- config.item_translate_table["T3 Hands"] = {"Desecrated Handguards", "Desecrated Gloves", "Desecrated Gauntlets"}
+-- config.item_translate_table["T3 Shoulders"] = {"Desecrated Spaulders", "Desecrated Shoulderpads", "Desecrated Pauldrons"}
+-- config.item_translate_table["T3 Chest"] = {"Desecrated Tunic", "Desecrated Robe", "Desecrated Breastplate"}
+-- config.item_translate_table["T3 Ring"] = {"Ring of the Dreamwalker", "Ring of the Cryptstalker", "Frostfire Ring", "Ring of Redemption", "Ring of Faith", "Bonescythe Ring", "Ring of the Earthshatterer",
+--     "Plagueheart Ring", "Ring of the Dreadnaught"}
 
 
 -- ##########
