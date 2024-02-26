@@ -251,7 +251,7 @@ end
 -- # LOOT FUNCTIONS #
 -- ##################
 
-local function ShowLoot(loot_master, data_sr, data_ss, data_if)
+local function ShowLoot(data_sr, data_ss, data_if)
     for idx_loot = 1, GetNumLootItems() do
         local item_icon, item_name, item_quantity, item_rarity, item_locked = GetLootSlotInfo(idx_loot)
         local item_is_autolooted = ItemIsAutolooted(item_name, data_if)
@@ -269,7 +269,7 @@ local function ShowLoot(loot_master, data_sr, data_ss, data_if)
             end
             local text = item_link..": "..item_ss.." ("..item_sr..")"
             SendChatMessage(text , config.channel, nil, nil)
-        elseif UnitName("player")==loot_master then
+        else
             local idx_mlc = GetPlayerIndex()
             GiveMasterLoot(idx_loot, idx_mlc)
         end
@@ -394,7 +394,9 @@ end)
 
 window:RegisterEvent("LOOT_OPENED")
 window:SetScript("OnEvent", function()
-    ShowLoot(loot_master, data_sr, data_ss, data_if)
+    if UnitName("player")==loot_master then
+        ShowLoot(data_sr, data_ss, data_if)
+    end
 end)
 
 -- check loot master
