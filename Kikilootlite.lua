@@ -17,7 +17,7 @@
 local config = {
     min_rarity = 2, -- 0 grey, 1 white and quest items, 2 green, 3 blue, ...
     rarities = {"Grey", "White", "Green", "Blue", "Purple"},
-    item_filter = {"a#w#Recipe", "a#w#Pattern", "a#e#Onyxia Hide Backpack"},
+    text_if = "r#w#Recipe\nr#w#Pattern\nr#e#Onyxia Hide Backpack",
     refresh_time = 5,
     channel = "RAID",
     window_height = 20,
@@ -157,6 +157,12 @@ local function ResetData(data)
     end
 end
 
+function GetTableLength(tbl)
+    local count = 0
+    for _ in pairs(tbl) do count = count + 1 end
+    return count
+end
+
 -- 21110,"Thunderfury, Blessed Blade of the Windseeker",Ragnaros,Malgoni,Warrior,Protection,,"04/02/2024, 14:53:38"
 local function ParseRaidres(text, data_sr) -- SR data
     text = text..'\n' -- add \n so last line will be matched as well
@@ -170,10 +176,12 @@ local function ParseRaidres(text, data_sr) -- SR data
     end
 end
 
-local function TranslateSpreadsheet(text, data_ss)
+local function TranslateSpreadsheet(data_ss)
     for item, info in pairs(data_ss) do
-        for _, item_translate in ipairs(config.item_translate_table[item]) do
-            data_ss[item_translate] = info
+        if config.item_translate_table[item] then
+            for _, item_translate in ipairs(config.item_translate_table[item]) do
+                data_ss[item_translate] = info
+            end
         end
     end
 end
@@ -186,20 +194,20 @@ local function ParseLootSpreadsheet(text, data_ss) -- data from spreadsheet
     for item, prio, rank in string.gfind(text, pattern) do
         data_ss[item] = rank.." -> "..prio
     end
-    TranslateSpreadsheet(text, data_ss)
+    TranslateSpreadsheet(data_ss)
 end
 
 -- Thunderfury, Blessed Blade of the Windseeker
 local function ParseItemFilter(text, data_if) -- item filter (items in this table will not be autolooted)
     text = text..'\n' -- add \n so last line will be matched as well
-    local pattern = '(.-)#(.-)#\n' -- modifier - gets 0 or more repetitions and matches the shortest sequence
+    local pattern = '(.-)#(.-)#(.-)\n' -- modifier - gets 0 or more repetitions and matches the shortest sequence
     ResetData(data_if)
     for option, modifier, item in string.gfind(text, pattern) do
-        table.insert(data_if, {option=option, modifier=modifier, item=item})
+        data_if[item] = {option=option, modifier=modifier}
     end
 end
 
-local function GetPlayerIndex(player_name)
+local function GetPlayerIndex()
     for idx_loop = 1, GetNumRaidMembers() do
         if (GetMasterLootCandidate(idx_loop) == UnitName("player")) then
             return idx_loop -- get master loot candidate index for player
@@ -208,14 +216,14 @@ local function GetPlayerIndex(player_name)
 end
 
 local function ItemIsAutolooted(item_name, data_if)
-    for _, item_filter in ipairs(data_if) do
-        if item_filter.option == "a" then
-            if item_filter.modifier == "e" then
-                if item_name == item_filter then -- if item_filter equals item_name (Onyxia Hide Backpack)
+    for item, info in pairs(data_if) do
+        if info.option == "a" then
+            if info.modifier == "e" then
+                if item_name == item then -- if item_filter equals item_name (Onyxia Hide Backpack)
                     return true
                 end
-            elseif item_filter.modifier == "w" then
-                if string.find(item_name, item_filter) then -- if item_filter is in item_name (Pattern:, Recipe:)
+            elseif info.modifier == "w" then
+                if string.find(item_name, item) then -- if item_filter is in item_name (Pattern:, Recipe:)
                     return true
                 end
             end
@@ -224,14 +232,14 @@ local function ItemIsAutolooted(item_name, data_if)
 end
 
 local function ItemIsRolled(item_name, data_if)
-    for _, item_filter in ipairs(data_if) do
-        if item_filter.option == "r" then
-            if item_filter.modifier == "e" then
-                if item_name == item_filter then -- if item_filter equals item_name (Onyxia Hide Backpack)
+    for item, info in pairs(data_if) do
+        if info.option == "r" then
+            if info.modifier == "e" then
+                if item_name == item then -- if item_filter equals item_name (Onyxia Hide Backpack)
                     return true
                 end
-            elseif item_filter.modifier == "w" then
-                if string.find(item_name, item_filter) then -- if item_filter is in item_name (Pattern:, Recipe:)
+            elseif info.modifier == "w" then
+                if string.find(item_name, item) then -- if item_filter is in item_name (Pattern:, Recipe:)
                     return true
                 end
             end
@@ -254,13 +262,15 @@ local function ShowLoot(loot_master, data_sr, data_ss, data_if)
             local item_link = GetLootSlotLink(idx_loot) or ""
             local item_ss = data_ss[item_name] or ""
             local item_sr = ""
-            for _,player_name in pairs(data_sr[item_name]) do
-                item_sr = item_sr..player_name.." "
+            if data_sr[item_name] then
+                for _, player_name in ipairs(data_sr[item_name]) do
+                    item_sr = item_sr..player_name.." "
+                end
             end
             local text = item_link..": "..item_ss.." ("..item_sr..")"
-            SendChatMessage(item_icon , config.channel, nil, nil)
+            SendChatMessage(text , config.channel, nil, nil)
         elseif UnitName("player")==loot_master then
-            local idx_mlc = GetPlayerIndex(player_name)
+            local idx_mlc = GetPlayerIndex()
             GiveMasterLoot(idx_loot, idx_mlc)
         end
     end
@@ -271,6 +281,7 @@ end
 -- ########
 
 local window = CreateFrame("Frame", "Kikiloot", UIParent)
+WindowLayout(window)
 local loot_master = ""
 local data_sr = {}
 local data_ss = {}
@@ -299,16 +310,16 @@ for idx_rarity, txt_rarity in ipairs(config.rarities) do
     local num_rarity_f = idx_rarity-1
     local txt_rarity_f = txt_rarity
     window.button_mr.sub[idx_rarity_f] = CreateFrame("Button", nil, window)
-    ButtonLayout(window.button_mr, window.button_mr.sub[idx_rarity_f], txt_rarity_f, "Select Rarity (below will be autolooted)", 0, num_rarity_f*config.button_size, config.button_rarity_width, config.button_size)
+    ButtonLayout(window.button_mr, window.button_mr.sub[idx_rarity_f], txt_rarity_f, "Select Rarity (below will be autolooted)", 0, idx_rarity_f*config.button_rarity_height, config.button_rarity_width, config.button_rarity_height)
     
     window.button_mr.sub[idx_rarity_f]:SetScript("OnClick", function()
         config.min_rarity = num_rarity_f
-        window.button_mr.sub.text:SetText(txt_rarity_f)
-        for idx_rarity, _ in ipairs(config.rarities) do
-            window.button_mr.sub[idx_rarity]:Hide()
+        window.button_mr.text:SetText(txt_rarity_f)
+        for idx_rar, _ in ipairs(config.rarities) do
+            window.button_mr.sub[idx_rar]:Hide()
         end
     end)
-    window.button_mr.sub[num_rarity]:Hide()
+    window.button_mr.sub[idx_rarity_f]:Hide()
 end
 
 -- #################
@@ -326,6 +337,11 @@ window.button_sr:SetScript("OnClick", function()
 end)
 window.import_sr:SetScript("OnTextChanged", function()
     ParseRaidres(this:GetText(), data_sr)
+    for item, _ in data_sr do
+        for _, player in ipairs(data_sr[item]) do
+            print(item..": "..player)
+        end
+    end
 end)
 
 window.button_ss:SetScript("OnClick", function()
@@ -339,6 +355,9 @@ window.button_ss:SetScript("OnClick", function()
 end)
 window.import_ss:SetScript("OnTextChanged", function()
     ParseLootSpreadsheet(this:GetText(), data_ss)
+    for item, info in data_ss do
+        print(item..": "..info)
+    end
 end)
 
 window.button_if:SetScript("OnClick", function()
@@ -352,13 +371,12 @@ window.button_if:SetScript("OnClick", function()
 end)
 window.import_if:SetScript("OnTextChanged", function()
     ParseItemFilter(this:GetText(), data_if)
+    for item, info in pairs(data_if) do
+        print(item..": "..info.option.."_"..info.modifier)
+    end
 end)
-data_if = config.item_filter -- default filter
-local text_if = ""
-for item,_ in data_if do
-    text_if = text_if..item.."\n"
-end
-window.import_if:SetText(text_if)
+window.import_if:SetText(config.text_if)
+ParseItemFilter(window.import_if:GetText(), data_if)
 
 window.button_mr:SetScript("OnClick", function()
     for idx_rarity,_ in ipairs(config.rarities) do
@@ -370,9 +388,14 @@ window.button_mr:SetScript("OnClick", function()
     end
 end)
 
--- ############
--- # ONUPDATE #
--- ############
+-- #######################
+-- # ONUPDATE AND EVENTS #
+-- #######################
+
+window:RegisterEvent("LOOT_OPENED")
+window:SetScript("OnEvent", function()
+    ShowLoot(loot_master, data_sr, data_ss, data_if)
+end)
 
 -- check loot master
 window:SetScript("OnUpdate", function()
@@ -404,7 +427,7 @@ end)
 -- stupid shit
 local fun_machine =  CreateFrame("Frame", nil, UIParent)
 local fun_machine_enabled = false
-local fun_machine_cd = 5*60
+local fun_machine_cd = 5
 local joke_machine_pattern ="tell me a joke, captain"
 local joke_machine_punchline = nil
 local joke_machine_punchline_delay = 5
@@ -540,6 +563,12 @@ Spider Ichor#Shaman Enh/Hunter#All Ranks
 ##
 ##
 Test#Warrior Tank /Paladin Tank#All Ranks
-T1 Wrist#Class Specific#All Ranks
+T1 Bracers#Class Specific#All Ranks
 Spider Palp#Class Specific#All Ranks
 --]]
+
+--[[
+a#w#Recipe
+a#w#Pattern
+a#e#Onyxia Hide Backpack
+]]
