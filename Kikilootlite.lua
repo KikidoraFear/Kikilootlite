@@ -15,9 +15,17 @@
 -- ##############
 
 local config = {
-    min_rarity = 2, -- 0 grey, 1 white and quest items, 2 green, 3 blue, ...
-    rarities = {"Grey", "White", "Green", "Blue", "Purple"},
-    text_if = "r#w#Book:\nr#w#Recipe:\nr#w#Pattern:\nr#e#Onyxia Hide Backpack\nr#e#Tome of Tranquilizing Shot\nr#e#Fortitude of the Scourge\nr#e#Power of the Scourge\nr#e#Might of the Scourge\nr#e#Resilience of the Scourge",
+    max_rarity = 2, -- 0 grey, 1 white and quest items, 2 green, 3 blue, ...
+    rarities = {[-1]="Nothing", [0]="Grey", [1]="White", [2]="Green", [3]="Blue", [4]="Purple"},
+    text_if = table.concat{"r#w#Book:\n",
+        "r#w#Recipe:\n",
+        "r#w#Pattern:\n",
+        "r#e#Onyxia Hide Backpack\n",
+        "r#e#Tome of Tranquilizing Shot\n",
+        "r#e#Fortitude of the Scourge\n",
+        "r#e#Power of the Scourge\n",
+        "r#e#Might of the Scourge\n",
+        "r#e#Resilience of the Scourge"},
     refresh_time = 5,
     channel = "RAID",
     window_height = 20,
@@ -77,6 +85,602 @@ config.item_translate_table["T2 Chest"] = {"Stormrage Chestguard", "Dragonstalke
 -- config.item_translate_table["T3 Chest"] = {"Desecrated Tunic", "Desecrated Robe", "Desecrated Breastplate"}
 -- config.item_translate_table["T3 Ring"] = {"Ring of the Dreamwalker", "Ring of the Cryptstalker", "Frostfire Ring", "Ring of Redemption", "Ring of Faith", "Bonescythe Ring", "Ring of the Earthshatterer",
 --     "Plagueheart Ring", "Ring of the Dreadnaught"}
+config.item_translate_table["Ring - Bonescythe"] = {"Bonescythe Ring"}
+config.item_translate_table["Ring - Cryptstalker"] = {"Ring of the Cryptstalker"}
+config.item_translate_table["Ring - Dreadnaught"] = {"Ring of the Dreadnaught"}
+config.item_translate_table["Ring - Dreamwalker"] = {"Ring of the Dreamwalker"}
+config.item_translate_table["Ring - Earthshatterer"] = {"Ring of the Earthshatterer"}
+config.item_translate_table["Ring - Faith"] = {"Ring of Faith"}
+config.item_translate_table["Ring - Frostfire"] = {"Frostfire Ring"}
+config.item_translate_table["Ring - Plagueheart"] = {"Plagueheart Ring"}
+
+
+config.text_ss = table.concat{
+    "Lavashard Axe#Warrior Fury#All Ranks\n",
+    "Core Forged Helmet#Paladin Tank#All Ranks\n",
+    "Boots of Blistering Flames#Mage#All Ranks\n",
+    "Ashskin Belt#Rogue#All Ranks\n",
+    "Shoulderpads of True Flight#Shaman Enh/Hunter#All Ranks\n",
+    "Lost Dark Iron Chain#Warrior Tank /Paladin Tank#All Ranks\n",
+    "T1 Wrist#Class Specific#All Ranks\n",
+    "T1 Belt#Class Specific#All Ranks\n",
+    "Robe of Volatile Power#Holy Paladin> Caster DPS#Raider\n",
+    "Salamander Scale Pants#Shaman/Druid/Paladin Healer#Raider\n",
+    "Sorcerous Dagger#Caster Dps/Healers#All Ranks\n",
+    "Wristguards of Stability#Feral Druid > Warrior Dps/Paladin Dps#All Ranks\n",
+    "Choker of Enlightenment#Caster dps#All Ranks\n",
+    "Crimson Shocker#Caster/Healers Wand#All Ranks\n",
+    "Flamewalker Legplates#Warrior/Paladin  #All Ranks\n",
+    "Heavy Dark Iron Ring#Druid Tank>Warrior Tank /Paladin Tank#All Ranks\n",
+    "Helm of the Lifegiver#Shaman Healer /Paladin Healer#All Ranks\n",
+    "Manastorm Leggings#Healers#All Ranks\n",
+    "Ring of Spell Power#Caster Dps#All Ranks\n",
+    "Tome of Tranquilizing Shot#Hunter#All Ranks\n",
+    "T1 Boots#Class Specific#All Ranks\n",
+    "T1 Gloves#Class Specific#All Ranks\n",
+    "Quick Strike Ring#Fury/Ret>Feral Druid#Raider\n",
+    "Talisman of Ephemeral Power#Caster Dps#Raider\n",
+    "Striker's Mark#Rogue/Warrior Fury#Raider\n",
+    "Mana Igniting Cord#Mage >Caster Dps#Raider\n",
+    "Fire Runed Grimoire#Caster Dps#All Ranks\n",
+    "Obsidian Edged Blade#Warrior 2H Fury/Paladin Ret#All Ranks\n",
+    "Sabatons of the Flamewalker#Hunter/Enh Shaman#All Ranks\n",
+    "Aged Core Leather Gloves#Rogue Dagger>Warrior Fury / Tank#All Ranks\n",
+    "Deep Earth Spaulders#Shaman Elemental#All Ranks\n",
+    "Earthshaker#Melee Dps #All Ranks\n",
+    "Eskhandar's Right Claw#Melee Dps #All Ranks\n",
+    "Flameguard Gauntlets#Warrior Fury/Paladin Ret#All Ranks\n",
+    "Flamewalker Legplates#Warrior/Paladin  #All Ranks\n",
+    "Magma Tempered Boots#Disenchant#All Ranks\n",
+    "Medallion of Steadfast Might#Tank#All Ranks\n",
+    "T1 Leggings#Class Specific#All Ranks\n",
+    "Robe of Volatile Power#Holy Paladin> Caster DPS#Raider\n",
+    "Salamander Scale Pants#Shaman/Druid/Paladin Healer#Raider\n",
+    "Sorcerous Dagger#Caster Dps/Healers#All Ranks\n",
+    "Wristguards of Stability#Feral Druid > Warrior Fury/Paladin Ret#All Ranks\n",
+    "Crimson Shocker#Caster/Healers Wand#All Ranks\n",
+    "Flamewalker Legplates#Warrior/Paladin  #All Ranks\n",
+    "Heavy Dark Iron Ring#Druid Tank>Warrior Tank #All Ranks\n",
+    "Helm of the Lifegiver#Shaman Healer /Paladin Healer#All Ranks\n",
+    "Manastorm Leggings#Healers#All Ranks\n",
+    "Ring of Spell Power#Caster Dps #All Ranks\n",
+    "T1 Boots#Class Specific#All Ranks\n",
+    "T1 Gloves#Class Specific#All Ranks\n",
+    "Bindings of the Windseeker#Warrior Tank/Paladin Tank#Loot Council\n",
+    "Brutality Blade#Rogue Sword>Warrior Fury > Hunter #Raider\n",
+    "Mana Igniting Cord#Mage >Caster Dps#Raider\n",
+    "Quick Strike Ring#Fury/Ret/Enh Shamans>Feral Druid#Raider\n",
+    "Talisman of Ephemeral Power#Mage and Warlock#Raider\n",
+    "Fire Runed Grimoire#Mage and Warlock#All Ranks\n",
+    "Obsidian Edged Blade#Warrior 2H Fury/Paladin Ret#All Ranks\n",
+    "Sabatons of the Flamewalker#Hunter/Enh Shaman#All Ranks\n",
+    "Aged Core Leather Gloves#Dagger Rogue > Warrior#All Ranks\n",
+    "Aurastone Hammer#Shaman/Druid/Pala Healers#All Ranks\n",
+    "Deep Earth Spaulders#Shaman Elemental#All Ranks\n",
+    "Drillborer Disk#Warrior Tank/Paladin Tank#All Ranks\n",
+    "Flameguard Gauntlets#Warrior Fury/Paladin Ret#All Ranks\n",
+    "Flamewalker Legplates#Warrior/Paladin  #All Ranks\n",
+    "Gutgore Ripper#Rogue #All Ranks\n",
+    "Magma Tempered Boots#Disenchant#All Ranks\n",
+    "T1 Helm#Class Specific#All Ranks\n",
+    "Bindings of the Windseeker#Warrior Tank/Paladin Tank#Loot Council\n",
+    "Mana Igniting Cord#Caster Dps#Raider\n",
+    "Quick Strike Ring#Fury/Ret/Enh Shamans>Feral Druid#Raider\n",
+    "Talisman of Ephemeral Power#Caster Dps#Raider\n",
+    "Fire Runed Grimoire#Caster Dps#All Ranks\n",
+    "Obsidian Edged Blade#Warrior 2H Fury/Paladin Ret#All Ranks\n",
+    "Sabatons of the Flamewalker#Hunter/Enh Shaman#All Ranks\n",
+    "Aged Core Leather Gloves#Dagger Rogue > Warrior#All Ranks\n",
+    "Deep Earth Spaulders#Shaman Elemental#All Ranks\n",
+    "Flameguard Gauntlets#Warrior Fury/Paladin Ret#All Ranks\n",
+    "Flamewalker Legplates#Warrior/Paladin  #All Ranks\n",
+    "Magma Tempered Boots#Disenchant#All Ranks\n",
+    "Seal of the Archmagus#Caster Dps #All Ranks\n",
+    "T1 Shoulder#Class Specific#All Ranks\n",
+    "Robe of Volatile Power#Holy Paladin> Caster DPS#Raider\n",
+    "Salamander Scale Pants#Healer#Raider\n",
+    "Sorcerous Dagger#Caster Dps/Healers#All Ranks\n",
+    "Wristguards of Stability#Feral Druid > Warrior Dps/Paladin Dps#All Ranks\n",
+    "Crimson Shocker#Caster/Healers Wand#All Ranks\n",
+    "Flamewalker Legplates#Warrior/Paladin  #All Ranks\n",
+    "Heavy Dark Iron Ring#Druid Tank>Warrior Tank /Paladin Tank#All Ranks\n",
+    "Helm of the Lifegiver#Shaman Healer /Paladin Healer#All Ranks\n",
+    "Manastorm Leggings#Healers#All Ranks\n",
+    "Ring of Spell Power#Caster Dps #All Ranks\n",
+    "T1 Boots#Class Specific#All Ranks\n",
+    "T1 Gloves#Class Specific#All Ranks\n",
+    "Robe of Volatile Power#Holy Paladin> Caster DPS#Raider\n",
+    "Salamander Scale Pants#Shaman/Druid/Paladin Healer#Raider\n",
+    "Sorcerous Dagger#Mage and Warlock#All Ranks\n",
+    "Wristguards of Stability#Feral > Fury /Ret#All Ranks\n",
+    "Crimson Shocker#Caster/Healers Wand#All Ranks\n",
+    "Flamewalker Legplates#Warrior/Paladin  #All Ranks\n",
+    "Heavy Dark Iron Ring#Tank#All Ranks\n",
+    "Helm of the Lifegiver#Healer#All Ranks\n",
+    "Manastorm Leggings#Healers#All Ranks\n",
+    "Ring of Spell Power#Caster dps#All Ranks\n",
+    "Shadowstrike#Vendor Roll#All Ranks\n",
+    "T1 Shoulder#Class Specific#All Ranks\n",
+    "Quick Strike Ring#Fury/Ret/Enh Shamans>Feral Druid#Raider\n",
+    "Talisman of Ephemeral Power#Caster Dps#Raider\n",
+    "Mana Igniting Cord#Mage>Other Casters#Raider\n",
+    "Azuresong Mageblade#Caster Dps/Holy Paladin#Raider\n",
+    "Fire Runed Grimoire#Caster Dps#All Ranks\n",
+    "Staff of Dominance#Caster/Healers Wand#All Ranks\n",
+    "Obsidian Edged Blade#Warrior 2H Fury/Paladin Ret#All Ranks\n",
+    "Sabatons of the Flamewalker#Hunter/Enh Shaman#All Ranks\n",
+    "Aged Core Leather Gloves#Dagger Rogue > Warrior#All Ranks\n",
+    "Blastershot Launcher#Warrior Fury>Rogue#All Ranks\n",
+    "Deep Earth Spaulders#Shaman Elemental#All Ranks\n",
+    "Flameguard Gauntlets#Warrior Fury/Paladin Ret#All Ranks\n",
+    "Flamewalker Legplates#Warrior/Paladin  #All Ranks\n",
+    "Magma Tempered Boots#Disenchant#All Ranks\n",
+    "T1 Chest#Class Specific#All Ranks\n",
+    "Ancient Petrified Leaf#Hunter#Loot Council\n",
+    "The Eye of Divinity#Priest#Loot Council\n",
+    "Cauterizing Band#Healer#Raider\n",
+    "Wild Growth Spaulders#Druid/Shaman/Paladin Healer#Raider\n",
+    "Sash of Whispered Secrets#Warlock/Shadow Priest#All Ranks\n",
+    "Wristguards of True Flight#Hunter/Shaman Enh/Paladin Ret#All Ranks\n",
+    "Core Forged Greaves#Tank#All Ranks\n",
+    "Core Hound Tooth#Rogue Dagger>Warrior>Hunter#All Ranks\n",
+    "Finkle's Lava Dredger#Feral Druid#All Ranks\n",
+    "Fireguard Shoulders#Tank Fire Resist#All Ranks\n",
+    "Fireproof Cloak#Everyone#All Ranks\n",
+    "Gloves of the Hypnotic Flame#Mage#All Ranks\n",
+    "Eye of Sulfuras#Shaman Enh/Warrior 2h Fury/Ret Paladin#Loot Council\n",
+    "Choker of the Firelord#Caster Dps#Core Raider \n",
+    "Band of Accuria#Tank/Melee Dps>Hunters#Core Raider \n",
+    "Onslaught Girdle#Warrior Fury/Paladin Ret#Raider\n",
+    "Bonereaver's Edge#Warrior 2h fury > Paladin Ret#Raider\n",
+    "Band of Sulfuras#Everyone#All Ranks\n",
+    "Cloak of the Shrouded Mists#Hunter/Feral Druid/Rogue#All Ranks\n",
+    "Crown of Destruction#Shaman Enh>Hunter>Ret Paladin#All Ranks\n",
+    "Dragon's Blood Cape#Everyone#All Ranks\n",
+    "Essence of the Pure Flame#Everyone#All Ranks\n",
+    "Malistar's Defender#Shaman Healer/Paladin Healer#All Ranks\n",
+    "Perdition's Blade#Dagger Rogue>Warrior Tank/Fury#All Ranks\n",
+    "Shard of the Flame#Everyone#All Ranks\n",
+    "Spinal Reaper#Shaman/Warrior 2H Fury/Paladin Ret#All Ranks\n",
+    "T2 Leggings#Class Specific#Raider\n",
+    "Vis'kag the Bloodletter#Rogue#Loot Council\n",
+    "Ancient Cornerstone Grimoire#Everyone#All Ranks\n",
+    "Deathbringer#Warriors Fury#Raider\n",
+    "Eskhandar's Collar#Feral Druid Tank#All Ranks\n",
+    "Head of Onyxia#Warrior/Rogue/Hunter/Feral Druid#All Ranks\n",
+    "Mature Black Dragon Sinew#Hunter#Loot Council\n",
+    "Ring of Binding#Tank#All Ranks\n",
+    "Sapphiron Drape#Caster Dps#All Ranks\n",
+    "Shard of the Scale#Healers#All Ranks\n",
+    "T2 Helm#Class Specific#All Ranks\n",
+    "Band of Dark Dominion#Warlock / Shadow Priest#All Ranks\n",
+    "Boots of Pure Thought#Healer#All Ranks\n",
+    "Cloak of Draconic Might#Fury Warrio/Enh Shaman/Cat Druid#All Ranks\n",
+    "Doom's Edge#Warrior Dual Fury#All Ranks\n",
+    "Draconic Avenger#Shaman/Warrior/Paladin Ret#All Ranks\n",
+    "Draconic Maul#Feral Druid#All Ranks\n",
+    "Essence Gatherer#Healer#All Ranks\n",
+    "Interlaced Shadow Jerkin#Everyone#All Ranks\n",
+    "Ringo's Blizzard Boots#Mage#All Ranks\n",
+    "Mantle of the Blackwing Cabal#Shadow Priest > Caster Dps#Raider\n",
+    "The Untamed Blade#Paladin Ret Prio#Raider\n",
+    "Gloves of Rapid Evolution#All Healers#All Ranks\n",
+    "Spineshatter#Warrior/Paladin Tank#All Ranks\n",
+    "Arcane Infused Gem#Hunter#All Ranks\n",
+    "The Black Book#Warlock#All Ranks\n",
+    "T2 Wrist#Class Specific#Raider\n",
+    "Mind Quickening Gem#Mage#Core Raider \n",
+    "Red Dragonscale Protector#Shaman/Paladin Healers#Raider\n",
+    "Helm of Endless Rage#Warrior/Paladin Dps#All Ranks\n",
+    "Dragonfang Blade#Dagger Rogue#All Ranks\n",
+    "Pendant of the Fallen Dragon#Healer#All Ranks\n",
+    "Rune of Metamorphosis#Druid#All Ranks\n",
+    "T2 Belt#Class Specific#Raider\n",
+    "Maladath, Runed blade of the Black Flight#Tank Non Human>Rogue/Dual Fury#Loot Council\n",
+    "Lifegiving Gem#Tank#Loot Council\n",
+    "Bracers of Arcane Accuracy#Caster Dps#Core Raider \n",
+    "Black Brood Pauldrons#Hunter/Enh Shaman#All Ranks\n",
+    "Head of Broodlord Lashlayer#Everyone#All Ranks\n",
+    "Heartstriker#Rogue and Fury PvP#All Ranks\n",
+    "Venomous Totem#Rogue#All Ranks\n",
+    "T2 Boots#Class Specific#Raider\n",
+    "Rejuvenating Gem#All Healers#Core Raider \n",
+    "Drake Talon Pauldrons#Warrior Fury#Raider\n",
+    "Cloak of Firemaw#Rogue Prio#Raider\n",
+    "Black Ash Robe#Everyone#All Ranks\n",
+    "Claw of the Black Drake#Warrior Dual Fury/Rogue#All Ranks\n",
+    "Drake Talon Cleaver#Shaman Enh>Paladin Ret>Warrior#All Ranks\n",
+    "Firemaw's Clutch#Shadow Priest >Healer>Caster#All Ranks\n",
+    "Natural Alignment Crystal#Shaman Elemental#All Ranks\n",
+    "Scrolls of Blinding Light#Paladin Holy#All Ranks\n",
+    "Primalist's Linked Legguards#Shaman Elemental#All Ranks\n",
+    "Ring of Blackrock#Shaman>Everyone #All Ranks\n",
+    "Shadow Wing Focus Staff#Caster Dps#All Ranks\n",
+    "Taut Dragonhide Belt#Rogue/Hunter#All Ranks\n",
+    "T2 Gloves#Class Specific#Raider\n",
+    "Drake Fang Talisman#Fury, Rogue and Tank >Hunter #Core Raider \n",
+    "Rejuvenating Gem#All Healers#Core Raider \n",
+    "Band of Forced Concentration#Caster Dps#Raider\n",
+    "Drake Talon Pauldrons#Warrior Fury#Raider\n",
+    "Aegis of Preservation#Priest#All Ranks\n",
+    "Dragonbreath Hand Cannon#Rogue, Hunter and Tank#All Ranks\n",
+    "Drake Talon Cleaver#Shaman Enh>Paladin Ret>Warrior#All Ranks\n",
+    "Ebony Flame Gloves#Warlock / Shadow Priest#All Ranks\n",
+    "Malfurion's Blessed Bulwark#Feral Druid >Rogue#All Ranks\n",
+    "Ring of Blackrock#Shaman>Everyone #All Ranks\n",
+    "Shadow Wing Focus Staff#Caster Dps#All Ranks\n",
+    "Taut Dragonhide Belt#Rogue/Feral Druid#All Ranks\n",
+    "T2 Gloves#Class Specific#Raider\n",
+    "Styleen's Impeding Scarab#Tank#Loot Council\n",
+    "Rejuvenating Gem#All Healers#Core Raider \n",
+    "Circle of Applied Force#Fury Prot>Feral Druid>Rogue#Raider\n",
+    "Drake Talon Pauldrons#Warrior Fury#Raider\n",
+    "Dragon's Touch#Caster Dps#All Ranks\n",
+    "Drake Talon Cleaver#Shaman Enh>Paladin Ret>Warrior#All Ranks\n",
+    "Emberweave Leggings#Tank FR /Off Tank FR#All Ranks\n",
+    "Herald of Woe#Feral Druid#All Ranks\n",
+    "Ring of Blackrock#Shaman>Everyone #All Ranks\n",
+    "Shadow Wing Focus Staff#Caster Dps#All Ranks\n",
+    "Shroud of Pure Thought#Healer#All Ranks\n",
+    "Taut Dragonhide Belt#Rogue/Feral Druid#All Ranks\n",
+    "T2 Gloves#Class Specific#Raider\n",
+    "Elementium Reinforced Bulwark#Warrior Tank#Loot Council\n",
+    "Ashjre'thul, Crossbow of Smiting#Hunter#Core Raider \n",
+    "Chromatic Boots#Warrior Fury Prot /Warrior Fury#Core Raider \n",
+    "Angelista's Grasp#Warlock/Shadow Priest#Raider\n",
+    "Chromatically Tempered Sword#Sword Rogue and Dual Fury#Raider\n",
+    "Claw of Chromaggus#Caster DPS>Healer#Raider\n",
+    "Empowered Leggings#Priest/Druid/Paladin Healer#Raider\n",
+    "Elementium Threaded Cloak#Druid Tank#All Ranks\n",
+    "Girdle of the Fallen Crusader#Disenchant#All Ranks\n",
+    "Primalist's Linked Waistguard#Shaman Elemental#All Ranks\n",
+    "Shimmering Geta#Healer#All Ranks\n",
+    "Taut Dragonhide Gloves#Druid/Shaman Caster#All Ranks\n",
+    "Taut Dragonhide Shoulderpads#Feral Druid >Rogue#All Ranks\n",
+    "T2 Shoulder#Class Specific#All Ranks\n",
+    "Neltharion's Tear#Caster DPS#Core Raider \n",
+    "Lok'amir il Romathis#Caster Dps>Healer#Core Raider \n",
+    "Ashkandi, Greatsword of the Brotherhood#2H Fury >Hunter>Ret Pala#Raider\n",
+    "Staff of the Shadow Flame#Caster dps#Raider\n",
+    "Mish'undare, Circlet of the Mind Flayer#Mages>Paladin Healer>Casters#Raider\n",
+    "Boots of the Shadow Flame#Rogue and Dual Fury/Feral Druid#Raider\n",
+    "Cloak of the Brood Lord#Caster Dps #Raider\n",
+    "Crul'shoruk, Edge of Chaos#Dual Fury and orc-Tanks#Raider\n",
+    "Prestor's Talisman of Connivery#Rogue / Hunter / Feral Cat #Raider\n",
+    "Pure Elementium Band#Healer#Raider\n",
+    "Archimtiros' Ring of Reckoning#Tank#All Ranks\n",
+    "Therazane's Link#Hunter/Enh Shaman#All Ranks\n",
+    "Head of Nefarian#Rogue, Hunter and Warrior#All Ranks\n",
+    "T2 Chest#Class Specific#Raider\n",
+    "Garb of Royal Ascension#Warlock Shadow Resistance#Loot Council\n",
+    "Gloves of the Immortal#Everyone#All Ranks\n",
+    "Neretzek, The Blood Drinker#Everyone#All Ranks\n",
+    "Anubisath Warhammer#Non Orc Tank / Dual Fury#All Ranks\n",
+    "Ritssyn's Ring of Chaos#Casters Dps#All Ranks\n",
+    "Shard of the Fallen Star#Everyone#All Ranks\n",
+    "Breastplate of Annihilation#Warrior Fury Only #Core Raider \n",
+    "Boots of the Unwavering Will#Tank#Raider\n",
+    "Cloak of Concentrated Hatred#Tank/Fury/Rogue/Ret Paladin/Enh Shaman/Feral#Raider\n",
+    "Amulet of Foul Warding#Tank/Melee Dps/Hunters Nature Resistance#All Ranks\n",
+    "Barrage Shoulders#Hunter#All Ranks\n",
+    "Beetle Scaled Wristguards#Everyone Leather Nature Resistance#All Ranks\n",
+    "Boots of the Fallen Prophet#Shaman Enh#All Ranks\n",
+    "Hammer of Ji'zhi#Shaman/Paladin / DE#All Ranks\n",
+    "Leggings of Immersion#Druid /Shaman Caster#All Ranks\n",
+    "Pendant of the Qiraji Guardian#Tank#All Ranks\n",
+    "Ring of Swarming Thought#Casters Dps#All Ranks\n",
+    "Staff of the Qiraji Prophets#Casters Dps#All Ranks\n",
+    "Imperial Qiraji Armaments#Dagger/1h Axe/Shield#Raider\n",
+    "Imperial Qiraji Regalia#Hit Staff/Healing Staff/Feral Mace#Raider\n",
+    "Ukko's Ring of Darkness#Warlock Shadow Resistance#Loot Council\n",
+    "Boots of the Fallen Hero#Warrior Fury Prot/Fury #Core Raider \n",
+    "Ternary Mantle#Priest Healer Prio #Core Raider \n",
+    "Angelista's Touch#Tank#Raider\n",
+    "Guise of the Devourer#Druid Tank#Raider\n",
+    "Mantle of the Desert Crusade#Paladin Holy#Raider\n",
+    "Mantle of the Desert's Fury#Shaman Resto Or Elemental#Raider\n",
+    "Vest of Swift Execution#Druid Cat/ Feral Tank > Rogue#Raider\n",
+    "Angelista's Charm#Healers#All Ranks\n",
+    "Bile-Covered Gauntlets#Everyone#All Ranks\n",
+    "Cape of the Trinity#Casters Dps#All Ranks\n",
+    "Gloves of Ebru#Shaman Elemental / Druid Boomkin#All Ranks\n",
+    "Mantle of Phrenic Power#Mage#All Ranks\n",
+    "Ooze-ridden Gauntlets#Nature Resist Gear#All Ranks\n",
+    "Petrified Scarab#Everyone#All Ranks\n",
+    "Ring of the Devoured#Druid /Shaman Caster#All Ranks\n",
+    "Robes of the Triumvirate#Casters/Healers Nature Resistance#All Ranks\n",
+    "Triad Girdle#Warrior Fury/Paladin Ret#All Ranks\n",
+    "Wand of Qiraji Nobility#Casters Dps#Raider\n",
+    "Imperial Qiraji Armaments#Dagger/1h Axe/Shield#Raider\n",
+    "Imperial Qiraji Regalia#Hit Staff/Healing Staff/Feral Mace#Raider\n",
+    "Sartura's Might#All Healers#Core Raider \n",
+    "Creeping Vine Helm#Paladin/Shamn/Druid Heal#Raider\n",
+    "Gauntlets of Steadfast Determination#Tank#Raider\n",
+    "Badge of the Swarmguard#Fury/Rogue/Hunter/Druid Feral/Enh Shaman#Raider\n",
+    "Gloves of Enforcement#Rogue/Feral Cat#Raider\n",
+    "Leggings of the Festering Swarm#Mage#Raider\n",
+    "Silithid Claw#Hunter#Raider\n",
+    "Thick Qirajihide Belt#Druid Tank#Raider\n",
+    "Necklace of Purity#Everyone#All Ranks\n",
+    "Recomposed Boots#Caster/Healer Nature Resistance#All Ranks\n",
+    "Robes of the Battleguard#Casters Dps#All Ranks\n",
+    "Scaled Leggings of Qiraji Fury#Shaman Elemental#All Ranks\n",
+    "Imperial Qiraji Armaments#Dagger/1h Axe/Shield#Raider\n",
+    "Imperial Qiraji Regalia#Hit Staff/Healing Staff/Feral Mace#Raider\n",
+    "Cloak of Untold Secrets#Warlock Shadow Resistance#Loot Council\n",
+    "Fetish of the Sand Reaver#Big Dick Dps Item #Loot Council\n",
+    "Ancient Qiraji Ripper#Rogue Sword  Prio#Core Raider \n",
+    "Barb of the Sand Reaver#Hunter#Core Raider \n",
+    "Barbed Choker#Warrior Fury/Shaman Enh/Rogue/Pala Ret#Core Raider \n",
+    "Totem of Life#Shaman Resto#Raider\n",
+    "Hive Tunneler's Boots#Druid Tank#Raider\n",
+    "Mantle of Wicked Revenge#Druid Tank#Raider\n",
+    "Pauldrons of the Unrelenting#Warrior Tank#Raider\n",
+    "Robes of the Guardian Saint#Healer Druid/Shaman/Paladin#Raider\n",
+    "Scaled Sand Reaver Leggings#Shaman Enh #Raider\n",
+    "Libram of Grace#Paladin Healer#All Ranks\n",
+    "Silithid Carapace Chestguard#WarriorTank,Fury /Paladin Ret#All Ranks\n",
+    "Imperial Qiraji Armaments#Dagger/1h Axe/Shield#Raider\n",
+    "Imperial Qiraji Regalia#Hit Staff/Healing Staff/ 1H Feral Mace#Raider\n",
+    "Sharpened Silithid Femur#Caster Dps#Core Raider \n",
+    "Ring of the Qiraji Fury#Warrior Fury/Shaman Enh/Rogue/Pala Ret#Core Raider \n",
+    "Gauntlets of Kalimdor#Shaman#All Ranks\n",
+    "Gauntlets of the Righteous Champion#Ret Paladin#All Ranks\n",
+    "Idol of Health#Druid#All Ranks\n",
+    "Scarab Brooch#Healers#All Ranks\n",
+    "Slime-coated Leggings#Shaman Enh#All Ranks\n",
+    "Imperial Qiraji Armaments#Dagger/1h Axe/Shield#Raider\n",
+    "Imperial Qiraji Regalia#Hit Staff/Healing Staff/Feral Mace#Raider\n",
+    "Qiraji Bindings of Command#T 2.5 Shoulders & Boots#Raider\n",
+    "Qiraji Bindings of Dominance#T 2.5 Shoulders & Boots#Raider\n",
+    "Ring of the Martyr#Healers#Core Raider \n",
+    "Cloak of the Golden Hive#Tank#Raider\n",
+    "Hive Defiler Wristguards#Warrior Fury/Paladin Ret#Raider\n",
+    "Wasphide Gauntlets#Druid/Shaman Resto#Raider\n",
+    "Gloves of the Messiah#All Healers#All Ranks\n",
+    "Huhuran's Stinger#Rogue#All Ranks\n",
+    "Imperial Qiraji Armaments#Dagger/1h Axe/Shield#Raider\n",
+    "Imperial Qiraji Regalia#Hit Staff/Healing Staff/Feral Mace#Raider\n",
+    "Qiraji Bindings of Command#T 2.5 Shoulders & Boots#Raider\n",
+    "Qiraji Bindings of Dominance#T 2.5 Shoulders & Boots#Raider\n",
+    "Amulet of Vek'nilash#Caster Dps#Core Raider \n",
+    "Royal Scepter of Vek'lor#Warlock / Mage#Core Raider \n",
+    "Kalimdor's Revenge#Ret Paladin / 2H Fury#Raider\n",
+    "Regenerating Belt of Vek'nilash#Paladin/Druid / Shaman Resto#Raider\n",
+    "Belt of the Fallen Emperor#Paladin Healer#Raider\n",
+    "Boots of Epiphany#Shadiw Priest >Caster Dps#Raider\n",
+    "Bracelets of Royal Redemption#All Healers#Raider\n",
+    "Gloves of the Hidden Temple#Feral Druid#Raider\n",
+    "Qiraji Execution Bracers#Dual Fury/Feral Cat/Rogue/Ret Paladin/Enh Shaman#Raider\n",
+    "Vek'lor's Gloves of Devastation#Shaman Enh#Raider\n",
+    "Ring of Emperor Vek'lor#Tank#Raider\n",
+    "Royal Qiraji Belt#Tank#Raider\n",
+    "Grasp of the Fallen Emperor#Shaman Elemental#All Ranks\n",
+    "Imperial Qiraji Armaments#Dagger/1h Axe/Shield#Raider\n",
+    "Imperial Qiraji Regalia#Hit Staff/Healing Staff/Feral Mace#Raider\n",
+    "Vek'lor's Diadem#T 2.5 Helm#Raider\n",
+    "Vek'nilash's Circlet#T 2.5 Helm#Raider\n",
+    "Jom Gabbar#Fury , Ret, Shaman Rogue and Hunter#Core Raider \n",
+    "Don Rigoberto's Lost Hat#All Healers#Raider\n",
+    "Burrower Bracers#Qurv > Caster DPS #Raider\n",
+    "Larvae of the Great Worm#Hunter#Raider\n",
+    "Wormscale Blocker#Shaman / Paladin Healers#Raider\n",
+    "The Burrower's Shell#Everyone#All Ranks\n",
+    "Imperial Qiraji Armaments#Dagger/1h Axe/Shield#Raider\n",
+    "Imperial Qiraji Regalia#Hit Staff/Healing Staff/Feral Mace#Raider\n",
+    "Ouro's Intact Hide#T 2.5 Legs#Raider\n",
+    "Skin of the Great Sandworm#T 2.5 Legs#Raider\n",
+    "Dark Edge of Insanity#Shaman Enh / Warrior 2H Fury#Loot Council\n",
+    "Belt of Never-ending Agony#Rogue>Shaman Enh#Core Raider \n",
+    "Cloak of Clarity#All Healers#Raider\n",
+    "Cloak of the Devoured#Caster Dps#Core Raider \n",
+    "Dark Storm Gauntlets#All Casters DPS#Core Raider \n",
+    "Death's Sting#Rogue Dagger#Core Raider \n",
+    "Eyestalk Waist Cord#Caster DPS#Core Raider \n",
+    "Gauntlets of Annihilation#Fury Warrior/Tank> Paladin Ret#Core Raider \n",
+    "Grasp of the Old God#Priest Healer Prio #Core Raider \n",
+    "Mark of C'Thun#Tank#Core Raider \n",
+    "Ring of the Godslayer#Hunter#Core Raider \n",
+    "Scepter of the False Prophet#Healers #Core Raider \n",
+    "Vanquished Tentacle of C'Thun#Everyone#All Ranks\n",
+    "Yshgo'lar, Cowl of Fanatical Devotion#Mage/Warlock#Core Raider \n",
+    "Remnants of an Old God#Rogue#Core Raider \n",
+    "Eye of C'Thun#Fury Tank/Caster Dps/Healers/Hunters#Core Raider \n",
+    "Carapace of the Old God#T 2.5 Chest#Core Raider \n",
+    "Husk of the Old God#T 2.5 Chest#Core Raider \n",
+    "Ghoul Skin Tunic#Feral Cat/Druid >Fury Warrior#All Ranks\n",
+    "Girdle of Elemental Fury#Elemental Shaman#All Ranks\n",
+    "Harbinger of Doom#Dagger Rogue / Hunter#All Ranks\n",
+    "Leggings of Elemental Fury#Elemental Shaman#All Ranks\n",
+    "Misplaced Servo Arm#Dual Fury Warrior / Rogue#All Ranks\n",
+    "Necro-Knight's Garb#Shadow Priest > Mage = Warlock#All Ranks\n",
+    "Pauldrons of Elemental Fury#Elemental Shaman#All Ranks\n",
+    "Ring of the Eternal Flame#Mage#All Ranks\n",
+    "Stygian Buckler#Everyone#\n",
+    "Band of Unanswered Prayers#Healer#Raider\n",
+    "Cryptfiend Silk Cloak#Tank#Raider\n",
+    "Gem of Nerubis#Caster DPS#Raider\n",
+    "Touch of Frost#Everyone Cold Resistance#Raider\n",
+    "Wristguards of Vengeance#Furry Warrior/Ret Paladin#Raider\n",
+    "Desecrated Bindings#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Wristguards#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Bracers#Tank>Rogue#Core Raider \n",
+    "Icebane Pauldrons#Plate Warrior / Ret Frost Resistance#Raider\n",
+    "Malice Stone Pendant#Caster DPS#Raider\n",
+    "Polar Shoulder Pads#Rogue#Raider\n",
+    "The Widow's Embrace#Healer#Core Raider \n",
+    "Widow's Remorse#Sword Rogue/ Dual Fury and Tank#Core Raider \n",
+    "Desecrated Bindings#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Wristguards#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Bracers#Tank>Rogue#Core Raider \n",
+    "Crystal Webbed Robe#Shadow priest > Mage = Warlock#Core Raider \n",
+    "Kiss of the Spider#Fury Warrior / Rogue / Enh Shaman / Ret Paladin#Core Raider \n",
+    "Maexxna's Fang#Dagger Rogue#Raider\n",
+    "Pendant of Forgotten Names#Healers#Raider\n",
+    "Wraith Blade#Mage = Warlock#Core Raider \n",
+    "Desecrated Gloves#Warlock / Priest#Core Raider \n",
+    "Desecrated Handguards#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Gauntlets#Tank>Rogue#Core Raider \n",
+    "Band of Reanimation#Hunter#Raider\n",
+    "Cloak of Suturing#Healer#Core Raider \n",
+    "Severance#Enh Shaman / 2H Fury Warrior#Raider\n",
+    "The Plague Bearer#Tank#Raider\n",
+    "Wand of Fates#Warlock = Shadow priest > Mage#Core Raider \n",
+    "Desecrated Shoulderpads#Warlock / Priest#Core Raider \n",
+    "Desecrated Spaulders#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Pauldrons#Tank>Rogue#Core Raider \n",
+    "Glacial Mantle#Caster/Healer Frost Resistance#Raider\n",
+    "Icy Scale Spaulders#Warrior/Hunter/Enh Shaman #Raider\n",
+    "Midnight Haze#Caster DPS#Raider\n",
+    "The End of Dreams#Shadow priest#Core Raider \n",
+    "Toxin Injector#Hunter / Rogue / Furry Warrior#Raider\n",
+    "Desecrated Shoulderpads#Warlock / Priest#Core Raider \n",
+    "Desecrated Spaulders#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Pauldrons#Tank>Rogue#Core Raider \n",
+    "Claymore of Unholy Might#2H Fury Warrior / Hunter#Raider\n",
+    "Death's Bargain#Shaman / Paladin Healers#Core Raider \n",
+    "Digested Hand of Power#Priest / Druid Healers#Raider\n",
+    "Gluth's Missing Collar#Tank#Raider\n",
+    "Rime Covered Mantle#Shadow priest = Mage > Warlock#Core Raider \n",
+    "Desecrated Shoulderpads#Warlock / Priest#Core Raider \n",
+    "Desecrated Spaulders#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Pauldrons#Tank>Rogue#Core Raider \n",
+    "Desecrated Bindings#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Wristguards#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Bracers#Tank>Rogue#Core Raider \n",
+    "Desecrated Sandals#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Boots#Hunter / Shaman / Druid#Core Raider \n",
+    "Desecrated Sabatons#Tank > Rogue#Core Raider \n",
+    "Desecrated Belt#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Girdle#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Waistguard#Tank > Rogue#Core Raider \n",
+    "Eye of Diminution#Warlock = Mage#Core Raider \n",
+    "Leggings of Polarity#Mage = Warlock > Shadow priest#Core Raider \n",
+    "Plated Abomination Ribcage#Fury Warrior#Raider\n",
+    "The Castigator#Non Orc Dual Fury / Tank#Raider\n",
+    "Spire of Twilight#Priest / Druid Healers#Raider\n",
+    "Desecrated Circlet#Mage / Warlock / Priest#Core Raider \n",
+    "Desecrated Headpiece#Hunter / Shaman / Druid /Paladin#Core Raider \n",
+    "Desecrated Helmet#Tank > Rogue#Core Raider \n",
+    "Band of the Inevitable#Warlock = Shadow priest > Mage#Core Raider \n",
+    "Cloak of the Scourge#Warrior/Rogue/Enh Shaman/Ret Paladin#Raider\n",
+    "Hailstone Band#Tank#Raider\n",
+    "Hatchet of Sundered Bone#Orc Warrior#Raider\n",
+    "Noth's Frigid Heart#Priest / Druid Healers#Core Raider \n",
+    "Totem of Flowing Water#Shaman Resto#Raider\n",
+    "Desecrated Belt#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Girdle#Hunter / Shaman / Druid /Paladin#Core Raider \n",
+    "Desecrated Waistguard#Tank > Rogue#Core Raider \n",
+    "Icebane Helmet#Warrior Frost Resistance#Raider\n",
+    "Icy Scale Coif#Hunter / Warrior Fury#Raider\n",
+    "Legplates of Carnage#2 Hand Fury Warrior#Raider\n",
+    "Necklace of Necropsy#Healer Without Cthun Neck > Healers with#Core Raider \n",
+    "Preceptor's Hat#Shadow priest > Mage = Warlock#Core Raider \n",
+    "Desecrated Belt#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Girdle#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Waistguard#Tank > Rogue#Core Raider \n",
+    "Band of Unnatural Forces#Warrior Fury/Rogue/Enh/Ret/Hunter#Core Raider \n",
+    "Brimstone Staff#Mage = Warlock > Shadow priest#Core Raider \n",
+    "Loatheb's Reflection#Everyone#Raider\n",
+    "Ring of Spiritual Fervor#Healer Druid/Shaman/Paladin#Raider\n",
+    "The Eye of Nerub#Hunter#Raider\n",
+    "Desecrated Leggings#Mage / Warlock / Priest#Core Raider \n",
+    "Desecrated Legguards#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Legplates#Tank > Rogue#Core Raider \n",
+    "Girdle of the Mentor#Warrior Fury/Tank / Ret Paladin#Core Raider \n",
+    "Iblis, Blade of the Fallen Seraph#Sword Rogue#Core Raider \n",
+    "Idol of Longevity#Druid#Raider\n",
+    "Signet of the Fallen Defender#Tank#Raider\n",
+    "Veil of Eclipse#Caster DPS#Raider\n",
+    "Wand of the Whispering Dead#Priest Healer#Raider\n",
+    "Desecrated Sandals#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Boots#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Sabatons#Tank > Rogue#Core Raider \n",
+    "Boots of Displacement#Rogue#\n",
+    "Glacial Headdress#Caster DPS / Healers#Raider\n",
+    "Polar Helmet#Rogue#Raider\n",
+    "Sadist's Collar#Rogue / Fury / Hunter / Enh Shaman / Ret Pala#Raider\n",
+    "The Soul Harvester's Bindings#Mage > Warlock > Shadow priest#Core Raider \n",
+    "Desecrated Sandals#Warlock / Priest / Mage#Core Raider \n",
+    "Desecrated Boots#Hunter / Shaman / Druid / Paladin#Core Raider \n",
+    "Desecrated Sabatons#Tank > Rogue#Core Raider \n",
+    "Corrupted Ashbringer#Ret Paladin > Warrior 2H Fury#Core Raider \n",
+    "Leggings of Apocalypse#Rogue#Raider\n",
+    "Maul of the Redeemed Crusader#Shaman Enh#Raider\n",
+    "Seal of the Damned#Mage = Warlock > Shadow priest#Raider\n",
+    "Soulstring#Hunter / Rogue / Fury#Raider\n",
+    "Warmth of Forgiveness#Healer#Raider\n",
+    "Desecrated Robe#Mage / Warlock / Priest#Core Raider \n",
+    "Desecrated Tunic#Hunter / Shaman / Druid#Core Raider \n",
+    "Desecrated Breastplate#Tank > Rogue#Core Raider \n",
+    "Claw of the Frost Wyrm#Hunter > Dual Fury Warrior#Raider\n",
+    "Cloak of the Necropolis#Mage = Warlock > Shadow priest#Core Raider \n",
+    "Eye of the Dead#Healer#Core Raider \n",
+    "Glyph of Deflection#Tank#Core Raider \n",
+    "Sapphiron's Left Eye#Mage = Warlock > Shadow priest#Core Raider \n",
+    "Sapphiron's Right Eye#Druid / Priest Healers#Core Raider \n",
+    "Shroud of Dominion#Rogue / Fury Warrior / Shaman Enh / Feral Cat#Core Raider \n",
+    "Slayer's Crest#Rogue / Hunter / Fury Warrior / Shaman Enh /Cat/Ret Pala#Core Raider \n",
+    "The Face of Death#Tank#Core Raider \n",
+    "The Restrained Essence of Sapphiron#Shadow priest > Caster DPS#Core Raider \n",
+    "Fortitude of the Scourge##Core Raider \n",
+    "Power of the Scourge#Mage = Warlock > Shadow priest#Core Raider \n",
+    "Might of the Scourge##Core Raider \n",
+    "Resilience of the Scourge##Core Raider \n",
+    "Doomfinger#Mage > Warlock > Shadow priest#Core Raider \n",
+    "Gem of Trapped Innocents#Mage = Warlock > Shadow priest#Core Raider \n",
+    "Gressil, Dawn of Ruin#Dual Fury Warrior / Rogue#Core Raider \n",
+    "Hammer of the Twisting Nether#Healer#Core Raider \n",
+    "Kingsfall#Dagger Rogue / Hunter#Core Raider \n",
+    "Might of Menethil#Warrior 2H Furry / Shaman Enh/ Ret Paladin#Core Raider \n",
+    "Nerubian Slavemaker#Hunter#Core Raider \n",
+    "Shield of Condemnation#Shaman / Paladin Healers#Core Raider \n",
+    "Soulseeker#Mage = Warlock > Shadow priest#Raider\n",
+    "Stormrage's Talisman of Seething#Rogue / Hunter / Fury Warrior / Shaman Enh /Feral Cat#Core Raider \n",
+    "The Hungering Cold#Sword Rogue / Tank / Dual Fury Warrior#Core Raider \n",
+    "The Phylactery of Kel'Thuzad##Core Raider \n",
+    "Mark of the Champion#DPS#Core Raider \n",
+    "Mark of the Champion#Caster DPS#Core Raider \n",
+    "Ring - Bonescythe#Rogue#Core Raider \n",
+    "Ring - Cryptstalker#Hunter#Core Raider \n",
+    "Ring - Dreadnaught#Tank#Core Raider \n",
+    "Ring - Dreamwalker#Druid#Core Raider \n",
+    "Ring - Earthshatterer#Shaman#Core Raider \n",
+    "Ring - Faith#Priest#Core Raider \n",
+    "Ring - Frostfire#Mage#Core Raider \n",
+    "Ring - Plagueheart#Warlock#All Ranks\n",
+    "Claw of Erennius##\n",
+    "Jadestone Skewer#Everyone#All Ranks\n",
+    "Jadestone Mallet#Everyone#All Ranks\n",
+    "Claw of Senthos#Everyone#All Ranks\n",
+    "Head of Solnius##\n",
+    "Ring of Nordrassil#Everyone#All Ranks\n",
+    "The Heart of Dreams#Everyone#All Ranks\n",
+    " Verdant Eye Necklace#Everyone#All Ranks\n",
+    "Robe of the Dreamways#Everyone#All Ranks\n",
+    "Sandals of Lucidity#Everyone#All Ranks\n",
+    "Talonwind Gauntlets#Everyone#All Ranks\n",
+    "Ancient Jade Leggings#Everyone#All Ranks\n",
+    "Sanctum Bark Wraps#Everyone#All Ranks\n",
+    "Mantle of the Wakener#Everyone#All Ranks\n",
+    "Jadestone Helmet#Everyone#All Ranks\n",
+    "Mallet of the Awakening#Everyone#All Ranks\n",
+    "Blessed Qiraji Bulwark#Everyone#All Ranks\n",
+    "Axe of Dormant Slumber#Everyone#All Ranks\n",
+    "Staff of the Dreamer#Everyone#All Ranks\n",
+    "Ring of Nature's Duality#Everyone#All Ranks\n",
+    "Shard of Nightmare#Everyone#All Ranks\n",
+    "Veil of Nightmare#Everyone#All Ranks\n",
+    "Libram of the Dreamguard#Everyone#All Ranks\n",
+    "Totem of the Stonebreaker#Everyone#All Ranks\n",
+    "Idol of the Emerald Rot#Everyone#All Ranks\n",
+    "Naturecaller's Tunic#Everyone#All Ranks\n",
+    "Choker of the Emerald Lord#Everyone#All Ranks\n",
+    "Breath of Solnius#Everyone#All Ranks\n",
+    "Crystal Sword of the Blossom#Everyone#All Ranks\n",
+    "Nature's Call#Everyone#All Ranks\n",
+    "Jadestone Protector#Everyone#All Ranks"
+}
 
 
 -- ##########
@@ -163,6 +767,13 @@ function GetTableLength(tbl)
     return count
 end
 
+local function GetItemStringFromItemlink(item_link)
+    local _,_,item_string = string.find(item_link, "|H(.-)|h") -- extracts item string from link
+    -- local printable = string.gsub(item_link, "\124", "\124\124"); -- makes item_link printable
+    -- print("Here's what it really looks like: \"" .. printable .. "\"");
+    return item_string
+end
+
 -- 21110,"Thunderfury, Blessed Blade of the Windseeker",Ragnaros,Malgoni,Warrior,Protection,,"04/02/2024, 14:53:38"
 local function ParseRaidres(text, data_sr) -- SR data
     text = text..'\n' -- add \n so last line will be matched as well
@@ -176,16 +787,6 @@ local function ParseRaidres(text, data_sr) -- SR data
     end
 end
 
-local function TranslateSpreadsheet(data_ss)
-    for item, info in pairs(data_ss) do
-        if config.item_translate_table[item] then
-            for _, item_translate in ipairs(config.item_translate_table[item]) do
-                data_ss[item_translate] = info
-            end
-        end
-    end
-end
-
 -- Thunderfury, Blessed Blade of the Windseeker#Warrior Fury#All Ranks
 local function ParseLootSpreadsheet(text, data_ss) -- data from spreadsheet
     text = text..'\n' -- add \n so last line will be matched as well
@@ -193,8 +794,12 @@ local function ParseLootSpreadsheet(text, data_ss) -- data from spreadsheet
     ResetData(data_ss)
     for item, prio, rank in string.gfind(text, pattern) do
         data_ss[item] = rank.." -> "..prio
+        if config.item_translate_table[item] then -- Translate Spreadsheet if needed
+            for _, item_translate in pairs(config.item_translate_table[item]) do
+                data_ss[item_translate] = rank.." -> "..prio
+            end
+        end
     end
-    TranslateSpreadsheet(data_ss)
 end
 
 -- Thunderfury, Blessed Blade of the Windseeker
@@ -256,14 +861,14 @@ local function ShowLoot(data_sr, data_ss, data_if)
         local item_icon, item_name, item_quantity, item_rarity, item_locked = GetLootSlotInfo(idx_loot)
         local item_is_autolooted = ItemIsAutolooted(item_name, data_if)
         local item_is_rolled = ItemIsRolled(item_name, data_if)
-        
-        -- if ((item_rarity >= config.min_rarity) and LootSlotIsItem(idx_loot)) or item_filter then -- if rarity>=min and not gold
-        if ((item_rarity >= config.min_rarity) and item_quantity>0 and (not item_is_autolooted)) or item_is_rolled then -- if item_quantity=0 for gold; cloth maybe isnt a LootSlotItem, idk -> Test that
+
+        -- if ((item_rarity > config.max_rarity) and LootSlotIsItem(idx_loot)) or item_filter then -- if rarity>=min and not gold
+        if ((item_rarity > config.max_rarity) and item_quantity>0 and (not item_is_autolooted)) or item_is_rolled then -- if item_quantity=0 for gold; cloth maybe isnt a LootSlotItem, idk -> Test that
             local item_link = GetLootSlotLink(idx_loot) or ""
             local item_ss = data_ss[item_name] or ""
             local item_sr = ""
             if data_sr[item_name] then
-                for _, player_name in ipairs(data_sr[item_name]) do
+                for _, player_name in pairs(data_sr[item_name]) do
                     item_sr = item_sr..player_name.." "
                 end
             end
@@ -287,39 +892,38 @@ local data_sr = {}
 local data_ss = {}
 local data_if = {}
 
-window.button_sr = CreateFrame("Button", nil, window)
+window.button_sr = CreateFrame("Button", nil, window) -- Soft Reserve
 ButtonLayout(window, window.button_sr, "SR", "Import SR", 0, 0, config.button_width, config.button_height)
 window.import_sr = CreateFrame("EditBox", nil, UIParent)
 EditBoxLayout(window, window.import_sr)
 
-window.button_ss = CreateFrame("Button", nil, window)
+window.button_ss = CreateFrame("Button", nil, window) -- Loot Spreadsheet
 ButtonLayout(window, window.button_ss, "SS", "Import Spreadsheet", config.button_width, 0, config.button_width, config.button_height)
 window.import_ss = CreateFrame("EditBox", nil, UIParent)
 EditBoxLayout(window, window.import_ss)
 
-window.button_if = CreateFrame("Button", nil, window)
+window.button_if = CreateFrame("Button", nil, window) -- Item Filter
 ButtonLayout(window, window.button_if, "IF", "Import Item Filter (a/r#w/e#item: a..autoloot, r..roll, w..wildcard, e..exact)", 2*config.button_width, 0, config.button_width, config.button_height)
 window.import_if = CreateFrame("EditBox", nil, UIParent)
 EditBoxLayout(window, window.import_if)
 
-window.button_mr = CreateFrame("Button", nil, window)
-window.button_mr.sub = {}
-ButtonLayout(window, window.button_mr, config.rarities[config.min_rarity+1], "Select Rarity (below will be autolooted)", 3*config.button_width, 0, config.button_rarity_width, config.button_rarity_height)
-for idx_rarity, txt_rarity in ipairs(config.rarities) do
+window.button_ar = CreateFrame("Button", nil, window) -- Autoloot Rarity
+window.button_ar.sub = {}
+ButtonLayout(window, window.button_ar, config.rarities[config.max_rarity], "Select Autoloot Rarity", 3*config.button_width, 0, config.button_rarity_width, config.button_rarity_height)
+for idx_rarity=-1,4 do
     local idx_rarity_f = idx_rarity
-    local num_rarity_f = idx_rarity-1
-    local txt_rarity_f = txt_rarity
-    window.button_mr.sub[idx_rarity_f] = CreateFrame("Button", nil, window)
-    ButtonLayout(window.button_mr, window.button_mr.sub[idx_rarity_f], txt_rarity_f, "Select Rarity (below will be autolooted)", 0, idx_rarity_f*config.button_rarity_height, config.button_rarity_width, config.button_rarity_height)
+    local txt_rarity_f = config.rarities[idx_rarity_f]
+    window.button_ar.sub[idx_rarity_f] = CreateFrame("Button", nil, window)
+    ButtonLayout(window.button_ar, window.button_ar.sub[idx_rarity_f], txt_rarity_f, "Select Autoloot Rarity", 0, (idx_rarity_f+2)*config.button_rarity_height, config.button_rarity_width, config.button_rarity_height)
     
-    window.button_mr.sub[idx_rarity_f]:SetScript("OnClick", function()
-        config.min_rarity = num_rarity_f
-        window.button_mr.text:SetText(txt_rarity_f)
-        for idx_rar, _ in ipairs(config.rarities) do
-            window.button_mr.sub[idx_rar]:Hide()
+    window.button_ar.sub[idx_rarity_f]:SetScript("OnClick", function()
+        config.max_rarity = idx_rarity_f
+        window.button_ar.text:SetText(txt_rarity_f)
+        for idx_btn, _ in pairs(config.rarities) do
+            window.button_ar.sub[idx_btn]:Hide()
         end
     end)
-    window.button_mr.sub[idx_rarity_f]:Hide()
+    window.button_ar.sub[idx_rarity_f]:Hide()
 end
 
 -- #################
@@ -338,7 +942,7 @@ end)
 window.import_sr:SetScript("OnTextChanged", function()
     ParseRaidres(this:GetText(), data_sr)
     -- for item, _ in data_sr do
-    --     for _, player in ipairs(data_sr[item]) do
+    --     for _, player in pairs(data_sr[item]) do
     --         print(item..": "..player)
     --     end
     -- end
@@ -359,6 +963,8 @@ window.import_ss:SetScript("OnTextChanged", function()
     --     print(item..": "..info)
     -- end
 end)
+window.import_ss:SetText(config.text_ss)
+ParseLootSpreadsheet(config.text_ss, data_ss)
 
 window.button_if:SetScript("OnClick", function()
     window.import_ss:Hide()
@@ -376,14 +982,14 @@ window.import_if:SetScript("OnTextChanged", function()
     -- end
 end)
 window.import_if:SetText(config.text_if)
-ParseItemFilter(window.import_if:GetText(), data_if)
+ParseItemFilter(config.text_if, data_if)
 
-window.button_mr:SetScript("OnClick", function()
-    for idx_rarity,_ in ipairs(config.rarities) do
-        if window.button_mr.sub[idx_rarity]:IsShown() then
-            window.button_mr.sub[idx_rarity]:Hide()
+window.button_ar:SetScript("OnClick", function()
+    for idx_rarity,_ in pairs(config.rarities) do
+        if window.button_ar.sub[idx_rarity]:IsShown() then
+            window.button_ar.sub[idx_rarity]:Hide()
         else
-            window.button_mr.sub[idx_rarity]:Show()
+            window.button_ar.sub[idx_rarity]:Show()
         end
     end
 end)
@@ -393,10 +999,33 @@ end)
 -- #######################
 
 window:RegisterEvent("LOOT_OPENED")
+-- window:RegisterEvent("CHAT_MSG_RAID")
+-- window:RegisterEvent("CHAT_MSG_PARTY")
+-- window:RegisterEvent("CHAT_MSG_RAID_LEADER")
+-- window:RegisterEvent("CHAT_MSG_RAID_WARNING")
 window:SetScript("OnEvent", function()
-    if UnitName("player")==loot_master then
-        ShowLoot(data_sr, data_ss, data_if)
-    end
+    -- if event=="LOOT_OPENED" then
+        if UnitName("player")==loot_master then
+            ShowLoot(data_sr, data_ss, data_if)
+        end
+    -- else -- arg1=item_link, arg2=author; add info to item if linked in raid
+    --     if arg2==loot_master then
+    --         local item_string = GetItemStringFromItemlink(item_link)
+    --         local item_name,_ = GetItemInfo(item_string)
+    --         local item_ss = data_ss[item_name] or ""
+    --         local item_sr = ""
+    --         if data_sr[item_name] then
+    --             for _, player_name in pairs(data_sr[item_name]) do
+    --                 item_sr = item_sr..player_name.." "
+    --                 SendChatMessage("Hey, you have SR on "..arg1, "WHISPER", nil, player_name);
+    --             end
+    --         end
+    --         if (item_ss ~= "") or (item_sr ~="") then
+    --             local text = item_ss.." ("..item_sr..")"
+    --             SendChatMessage(text , config.channel, nil, nil)
+    --         end
+    --     end
+    -- end
 end)
 
 -- check loot master
@@ -426,111 +1055,109 @@ end)
 
 
 
--- stupid shit
-local fun_machine =  CreateFrame("Frame", nil, UIParent)
-local fun_machine_enabled = false
-local fun_machine_cd = 5
-local joke_machine_pattern ="tell me a joke, captain"
-local joke_machine_punchline = nil
-local joke_machine_punchline_delay = 5
-local motivator_machine_pattern ="motivate me, captain"
-local joke_machine = {{"A blind man walks into a bar.", "And a table. And a chair."},
-    {"What do wooden whales eat?", "Plankton"},
-    {"What's better than winning the silver medal at the Paralympics?", "Having legs."},
-    {"Two fish in a tank, one says to the other", "\"You man the guns, I'll drive!\""},
-    {"Two soldiers are in a tank, one says to the other", "\"BLURGBLBLURG!\""},
-    {"What do you call an alligator in a vest", "An Investigator"},
-    {"How many tickles does it take to get an octopus to laugh?", "Ten-tickles!"},
-    {"Did you hear about the midget fortune teller who kills his customers?", "He's a small medium at large"},
-    {"What's the best time to go to the dentist?", "2:30"},
-    {"Yo mama so fat, when she was interviewed on Channel 6 news", "you could see her sides on the channels 5 and 7"},
-    {"Yo mama so fat, i swerved to miss her in my car", "and ran out of gas"},
-    {"How many push ups can Chuck Norris do?", "All of them"},
-    {"How did the hacker get away from the police?", "He ransomware"},
-    {"I met a genie once. He gave me one wish. I said \"I wish i could be you\"", "the genie replued \"weurd wush but u wull grant ut\""},
-    {"i bought my daughter a refrigerator for her birthday", "i cant wait to see her face light up when she opens it"},
-    {"a call comes in to 911 \"come quick, my friend was bitten by a wolf!\", operator:\"Where?\"", "\"no, a regular one\""},
-    {"Did you hear about the french cheese factory explosion?", "da brie was everywhere"},
-    {"why do germans store their cheese together with their sausage?", "they're prepared for a wurst-kase scenario"},
-    {"why did the aztec owl not know what the other owls were saying to each other?", "they were inca hoots"}
-}
-local motivator_machine = {"It's never too late to give up",
-    "This is the worst day of my life",
-    "Don't follow your friends off a bridge; lead them",
-    "Just because you're special, doesn't mean you're useful",
-    "No one is as dumb as all of us together",
-    "It may be that the purpose of your life is to serve as a warning for others",
-    "If you ever feel alone, don't",
-    "Give up on your dreams and die",
-    "Trying is the first step to failure",
-    "Make sure to drink water so you can stay hydrated while you suffer",
-    "The Nail that sticks out gets hammered down",
-    "I got an ant farm. They didn't grow shit",
-    "They don't think it be like it is but it do",
-    "If Id agreed with you we'd both be wrong",
-    "Tutant meenage neetle teetle",
-    "When you want win but you receive lose",
-    "Get two birds stoned at once",
-    "Osteoporosis sucks",
-    "Success is just failure that hasn't happened yet",
-    "Never underestimate the power of stupid people in large groups",
-    "I hate everyone equally",
-    "Only dread one day at a time",
-    "Hope is the first step on the road to disappointment",
-    "The beatings will continue until morale improves",
-    "It's always darkest just before it goes pitch black",
-    "When you do bad, no one will forget",
-    "Life's a bitch, then you die",
-    "You suck",
-    "Fuck you",
-    "Not even Noah's ark can carry you, animals",
-    "Your mother buys you Mega Bloks instead of Legos",
-    "You look like you cut your hair with a knife and fork",
-    "You all reek of poverty and animal abuse",
-    "Your garden is overgrown and your cucumbers are soft"
-}
+-- ###############
+-- # Fun Machine #
+-- ###############
 
-fun_machine:SetScript("OnUpdate", function()
-    if not fun_machine.clock_machine then fun_machine.clock_machine = GetTime() end
-    if GetTime() > fun_machine.clock_machine + fun_machine_cd then
-        fun_machine_enabled = true
-        fun_machine.clock_machine = GetTime()
-    end
-    if not fun_machine.clock_punchline then fun_machine.clock_punchline = GetTime() end
-    if (GetTime() > fun_machine.clock_punchline) and joke_machine_punchline then
-        SendChatMessage(joke_machine_punchline, "RAID_WARNING", nil, nil)
-        joke_machine_punchline = nil
-    end
-end)
-fun_machine:RegisterEvent("CHAT_MSG_RAID")
-fun_machine:RegisterEvent("CHAT_MSG_PARTY")
--- fun_machine:RegisterEvent("CHAT_MSG_RAID_LEADER")
-fun_machine:SetScript("OnEvent", function()
-    if IsRaidLeader() then
-        for _ in string.gfind(arg1, joke_machine_pattern) do
-            if fun_machine_enabled then
-                local idx = math.random(1, GetTableLength(joke_machine))
-                SendChatMessage(joke_machine[idx][1] , "RAID_WARNING", nil, nil)
-                joke_machine_punchline = joke_machine[idx][2]
-                fun_machine.clock_machine = GetTime()
-                fun_machine.clock_punchline = GetTime()+joke_machine_punchline_delay
-                fun_machine_enabled = false
-            else
-                SendChatMessage("No." , "RAID_WARNING", nil, nil)
-            end
-        end
-        for _ in string.gfind(arg1, motivator_machine_pattern) do
-            if fun_machine_enabled then
-                local idx = math.random(1, GetTableLength(motivator_machine))
-                SendChatMessage(motivator_machine[idx] , "RAID_WARNING", nil, nil)
-                fun_machine.clock_machine = GetTime()
-                fun_machine_enabled = false
-            else
-                SendChatMessage("No." , "RAID_WARNING", nil, nil)
-            end
-        end
-    end
-end)
+-- local fun_machine =  CreateFrame("Frame", nil, UIParent)
+-- local fun_machine_enabled = false
+-- local fun_machine_cd = 5*60
+-- local joke_machine_pattern ="tell me a joke, captain"
+-- local joke_machine_punchline = nil
+-- local joke_machine_punchline_delay = 5
+-- local motivator_machine_pattern ="motivate me, captain"
+-- local joke_machine = {{"A blind man walks into a bar.", "And a table. And a chair."},
+--     {"What do wooden whales eat?", "Plankton"},
+--     {"Two fish in a tank, one says to the other", "\"You man the guns, I'll drive!\""},
+--     {"Two soldiers are in a tank, one says to the other", "\"BLURGBLBLURG!\""},
+--     {"What do you call an alligator in a vest", "An Investigator"},
+--     {"How many tickles does it take to get an octopus to laugh?", "Ten-tickles!"},
+--     {"Did you hear about the midget fortune teller who kills his customers?", "He's a small medium at large"},
+--     {"What's the best time to go to the dentist?", "2:30"},
+--     {"Yo mama so fat, when she was interviewed on Channel 6 news", "you could see her sides on the channels 5 and 7"},
+--     {"Yo mama so fat, i swerved to miss her in my car", "and ran out of gas"},
+--     {"How many push ups can Chuck Norris do?", "All of them"},
+--     {"How did the hacker get away from the police?", "He ransomware"},
+--     {"I met a genie once. He gave me one wish. I said \"I wish i could be you\"", "the genie replued \"weurd wush but u wull grant ut\""},
+--     {"i bought my daughter a refrigerator for her birthday", "i cant wait to see her face light up when she opens it"},
+--     {"a call comes in to 911 \"come quick, my friend was bitten by a wolf!\", operator:\"Where?\"", "\"no, a regular one\""},
+--     {"Did you hear about the french cheese factory explosion?", "da brie was everywhere"},
+--     {"why do germans store their cheese together with their sausage?", "they're prepared for a wurst-kase scenario"},
+--     {"why did the aztec owl not know what the other owls were saying to each other?", "they were inca hoots"}
+-- }
+-- local motivator_machine = {"It's never too late to give up",
+--     "This is the worst day of my life",
+--     "Don't follow your friends off a bridge; lead them",
+--     "Just because you're special, doesn't mean you're useful",
+--     "No one is as dumb as all of us together",
+--     "It may be that the purpose of your life is to serve as a warning for others",
+--     "If you ever feel alone, don't",
+--     "Give up on your dreams and die",
+--     "Trying is the first step to failure",
+--     "Make sure to drink water so you can stay hydrated while you suffer",
+--     "The Nail that sticks out gets hammered down",
+--     "I got an ant farm. They didn't grow shit",
+--     "They don't think it be like it is but it do",
+--     "If Id agreed with you we'd both be wrong",
+--     "Tutant meenage neetle teetle",
+--     "When you want win but you receive lose",
+--     "Get two birds stoned at once",
+--     "Osteoporosis sucks",
+--     "Success is just failure that hasn't happened yet",
+--     "Never underestimate the power of stupid people in large groups",
+--     "I hate everyone equally",
+--     "Only dread one day at a time",
+--     "Hope is the first step on the road to disappointment",
+--     "The beatings will continue until morale improves",
+--     "It's always darkest just before it goes pitch black",
+--     "When you do bad, no one will forget",
+--     "Life's a bitch, then you die",
+--     "You suck",
+--     "Fuck you",
+--     "Not even Noah's ark can carry you, animals",
+--     "Your mother buys you Mega Bloks instead of Legos",
+--     "You look like you cut your hair with a knife and fork",
+--     "You all reek of poverty and animal abuse",
+--     "Your garden is overgrown and your cucumbers are soft"
+-- }
+
+-- fun_machine:SetScript("OnUpdate", function()
+--     if not fun_machine.clock_machine then fun_machine.clock_machine = GetTime() end
+--     if GetTime() > fun_machine.clock_machine + fun_machine_cd then
+--         fun_machine_enabled = true
+--         fun_machine.clock_machine = GetTime()
+--     end
+--     if not fun_machine.clock_punchline then fun_machine.clock_punchline = GetTime() end
+--     if (GetTime() > fun_machine.clock_punchline) and joke_machine_punchline then
+--         SendChatMessage(joke_machine_punchline, "RAID_WARNING", nil, nil)
+--         joke_machine_punchline = nil
+--     end
+-- end)
+-- fun_machine:RegisterEvent("CHAT_MSG_RAID")
+-- fun_machine:RegisterEvent("CHAT_MSG_PARTY")
+-- -- fun_machine:RegisterEvent("CHAT_MSG_RAID_LEADER")
+-- fun_machine:SetScript("OnEvent", function()
+--     if IsRaidLeader() then
+--         if fun_machine_enabled then
+--             for _ in string.gfind(arg1, joke_machine_pattern) do
+--                 local idx = math.random(1, GetTableLength(joke_machine))
+--                 SendChatMessage(joke_machine[idx][1] , "RAID_WARNING", nil, nil)
+--                 joke_machine_punchline = joke_machine[idx][2]
+--                 fun_machine.clock_machine = GetTime()
+--                 fun_machine.clock_punchline = GetTime()+joke_machine_punchline_delay
+--                 fun_machine_enabled = false
+--             end
+--         end
+--         if fun_machine_enabled then
+--             for _ in string.gfind(arg1, motivator_machine_pattern) do
+--                 local idx = math.random(1, GetTableLength(motivator_machine))
+--                 SendChatMessage(motivator_machine[idx] , "RAID_WARNING", nil, nil)
+--                 fun_machine.clock_machine = GetTime()
+--                 fun_machine_enabled = false
+--             end
+--         end
+--     end
+-- end)
 
 -- #########
 -- # Tests #
@@ -544,9 +1171,9 @@ ID,Item,Boss,Attendee,Class,Specialization,Comment,Date
 18814,"Spider's Silk",Ragnaros,Bibbley,Warlock,Destruction,,"04/02/2024, 14:55:41"
 18814,"Spider's Silk",Ragnaros,Aldiuss,Warlock,Destruction,,"04/02/2024, 14:55:41"
 18814,"Spider's Silk",Ragnaros,Kikidora,Warlock,Destruction,,"04/02/2024, 14:55:41"
-18814,"Ruined Pelt",Ragnaros,Kikidora,Warlock,Destruction,,"04/02/2024, 14:55:41"
-18814,"Ruined Pelt",Ragnaros,Bibbley,Warlock,Destruction,,"04/02/2024, 14:55:41"
-18814,"Ruined Pelt",Ragnaros,Test,Warlock,Destruction,,"04/02/2024, 14:55:41"
+18814,"Splintered Tusk",Ragnaros,Kikidora,Warlock,Destruction,,"04/02/2024, 14:55:41"
+18814,"Splintered Tusk",Ragnaros,Bibbley,Warlock,Destruction,,"04/02/2024, 14:55:41"
+18814,"Splintered Tusk",Ragnaros,Test,Warlock,Destruction,,"04/02/2024, 14:55:41"
 18814,"Stringy Vulture Meat",Ragnaros,Kikidora,Warlock,Destruction,,"04/02/2024, 14:55:41"
 18814,"Gooey Spider Leg",Ragnaros,Pestilentia,Warlock,Destruction,,"04/02/2024, 14:55:41"
 18814,"Spider Ichor",Ragnaros,Grizzlix,Warlock,Destruction,,"04/02/2024, 14:55:41"
