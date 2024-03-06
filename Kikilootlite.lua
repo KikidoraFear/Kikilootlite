@@ -767,6 +767,27 @@ function GetTableLength(tbl)
     return count
 end
 
+local function GetLootMaster()
+    local loot_method, loot_master_id_party, loot_master_id_raid = GetLootMethod()
+    if (loot_method == "master") then
+        if loot_master_id_raid then
+            if loot_master_id_raid == 0 then
+                return UnitName("player")
+            else
+                return UnitName("raid"..loot_master_id_raid)
+            end
+        elseif loot_master_id_party then
+            if loot_master_id_party == 0 then
+                return UnitName("player")
+            else
+                return UnitName("party"..loot_master_id_party)
+            end
+        end
+    else
+        return ""
+    end
+end
+
 local function GetItemStringFromItemlink(item_link)
     local _,_,item_string = string.find(item_link, "|H(.-)|h") -- extracts item string from link
     -- local printable = string.gsub(item_link, "\124", "\124\124"); -- makes item_link printable
@@ -998,83 +1019,16 @@ end)
 -- # ONUPDATE AND EVENTS #
 -- #######################
 
-local motivator_machine = {"It's never too late to give up",
-    "This is the worst day of my life",
-    "Don't follow your friends off a bridge; lead them",
-    "Just because you're special, doesn't mean you're useful",
-    "No one is as dumb as all of us together",
-    "It may be that the purpose of your life is to serve as a warning for others",
-    "If you ever feel alone, don't",
-    "Give up on your dreams and die",
-    "Trying is the first step to failure",
-    "Make sure to drink water so you can stay hydrated while you suffer",
-    "The Nail that sticks out gets hammered down",
-    "I got an ant farm. They didn't grow shit",
-    "They don't think it be like it is but it do",
-    "If Id agreed with you we'd both be wrong",
-    "Tutant meenage neetle teetle",
-    "When you want win but you receive lose",
-    "Get two birds stoned at once",
-    "Osteoporosis sucks",
-    "Success is just failure that hasn't happened yet",
-    "Never underestimate the power of stupid people in large groups",
-    "I hate everyone equally",
-    "Only dread one day at a time",
-    "Hope is the first step on the road to disappointment",
-    "The beatings will continue until morale improves",
-    "It's always darkest just before it goes pitch black",
-    "When you do bad, no one will forget",
-    "Life's a bitch, then you die",
-    "You suck",
-    "Fuck you",
-    "Not even Noah's ark can carry you, animals",
-    "Your mother buys you Mega Bloks instead of Legos",
-    "You look like you cut your hair with a knife and fork",
-    "You all reek of poverty and animal abuse",
-    "Your garden is overgrown and your cucumbers are soft"
-}
-
 window:RegisterEvent("LOOT_OPENED")
-window:RegisterEvent("PLAYER_DEAD")
+-- window:RegisterEvent("PLAYER_DEAD")
 -- window:RegisterEvent("CHAT_MSG_PARTY")
 -- window:RegisterEvent("CHAT_MSG_RAID_LEADER")
 -- window:RegisterEvent("CHAT_MSG_RAID_WARNING")
 window:SetScript("OnEvent", function()
-    if event=="LOOT_OPENED" then
-        if UnitName("player")==loot_master then
-            ShowLoot(data_sr, data_ss, data_if)
-        end
-    else
-        local idx = math.random(1, GetTableLength(motivator_machine))
-        SendChatMessage(motivator_machine[idx] , "RAID_WARNING", nil, nil)
+    if UnitName("player")==GetLootMaster() then
+        ShowLoot(data_sr, data_ss, data_if)
     end
 end)
-
--- check loot master
-window:SetScript("OnUpdate", function()
-    if not window.clock then window.clock = GetTime() end
-    if GetTime() > window.clock + config.refresh_time then
-        local loot_method, loot_master_id_party, loot_master_id_raid = GetLootMethod()
-        if (loot_method == "master") then
-            if loot_master_id_raid then
-                if loot_master_id_raid == 0 then
-                    loot_master = UnitName("player")
-                else
-                    loot_master = UnitName("raid"..loot_master_id_raid)
-                end
-            elseif loot_master_id_party then
-                if loot_master_id_party == 0 then
-                    loot_master = UnitName("player")
-                else
-                    loot_master = UnitName("party"..loot_master_id_party)
-                end
-            end
-        end
-        window.clock = GetTime()
-    end
-end)
-
-
 
 
 -- ###############
