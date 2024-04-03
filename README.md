@@ -10,7 +10,7 @@
   r#e#Onyxia Hide Backpack: Onyxia Hide Backpack will be rolled regardless of rarity  
   r#w#Recipe: Items that have Recipe in their name will be autolooted regardless of rarity
 - rarity selector (grey/white/green/blue/purple)
-  everything equal or above will be posted in /ra, everything below will be looted to master looter
+  everything above will be posted in /ra, everything equal or below will be looted to master looter
 
 ## Default values
 - IF:  
