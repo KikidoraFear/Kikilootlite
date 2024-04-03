@@ -689,7 +689,7 @@ config.text_ss = table.concat{
 
 local function WindowLayout(window)
     window:SetBackdrop({bgFile = 'Interface\\Tooltips\\UI-Tooltip-Background'})
-    window:SetBackdropColor(0, 0, 0, 1)
+    window:SetBackdropColor(0.2, 0.2, 0.2, 1)
     window:SetPoint('CENTER', UIParent)
     window:SetWidth(config.window_width)
     window:SetHeight(config.window_height)
@@ -721,7 +721,7 @@ local function ButtonLayout(parent, btn, txt, tooltip, ofs_x, ofs_y, width, heig
     btn.text:SetPoint("CENTER", btn, "CENTER")
     btn.text:SetText(txt)
     btn.text:Show()
-    btn:SetBackdropColor(1, 1, 1, 1)
+    btn:SetBackdropColor(0, 0, 0, 1)
     btn:SetBackdropBorderColor(0, 0, 0, 1)
     btn:SetScript("OnEnter", function()
         btn:SetBackdropBorderColor(1, 1, 1, 1)
