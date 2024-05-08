@@ -24,3 +24,4 @@
   r#e#Might of the Scourge  
   r#e#Resilience of the Scourge  
   r#e#Mr. Bigglesworth  
+  r#e#Dream Frog  
