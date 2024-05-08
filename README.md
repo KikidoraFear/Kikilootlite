@@ -22,5 +22,5 @@
   r#e#Fortitude of the Scourge  
   r#e#Power of the Scourge  
   r#e#Might of the Scourge  
-  r#e#Resilience of the Scourge
+  r#e#Resilience of the Scourge  
   r#e#Mr. Bigglesworth  
